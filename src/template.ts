@@ -29,6 +29,7 @@ export function generateFrootKitTemplate(projectName: string): TemplateFileMap {
           '@tailwindcss/cli': '^4.0.0',
           tailwindcss: '^4.0.0',
           '@types/node': '^22.10.0',
+          tsx: '^4.19.2',
           typescript: '^5.8.0',
         },
       },
