@@ -1,0 +1,42 @@
+{
+  "name": "create-frootkit",
+  "version": "1.0.0",
+  "description": "Interactive CLI for scaffolding high-performance FrootKit (Next.js Alternative) applications",
+  "type": "module",
+  "bin": {
+    "create-frootkit": "./dist/index.js",
+    "create-froot-fullstack": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test tests/*.test.ts"
+  },
+  "keywords": [
+    "froot",
+    "fullstack",
+    "nextjs",
+    "preact",
+    "tailwind",
+    "ssr",
+    "ssg",
+    "cli"
+  ],
+  "author": "OrbitNorth LLC",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/orbitnorth/create-frootkit.git"
+  },
+  "homepage": "https://github.com/orbitnorth/create-frootkit#readme",
+  "bugs": {
+    "url": "https://github.com/orbitnorth/create-frootkit/issues"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.8.0"
+  }
+}
+
