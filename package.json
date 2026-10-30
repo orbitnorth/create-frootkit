@@ -1,11 +1,11 @@
 {
   "name": "create-frootkit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Interactive CLI for scaffolding high-performance FrootKit (Next.js Alternative) applications",
   "type": "module",
   "bin": {
-    "create-frootkit": "./dist/index.js",
-    "create-froot-fullstack": "./dist/index.js"
+    "create-frootkit": "dist/index.js",
+    "create-froot-fullstack": "dist/index.js"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -25,6 +25,14 @@
   ],
   "author": "OrbitNorth LLC",
   "license": "MIT",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/orbitnorth/create-frootkit.git"
@@ -39,4 +47,3 @@
     "typescript": "^5.8.0"
   }
 }
-

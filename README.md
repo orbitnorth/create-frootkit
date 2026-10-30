@@ -38,3 +38,4 @@ bun create frootkit my-app
 ## 📄 License
 
 MIT © [OrbitNorth LLC](https://github.com/orbitnorth)
+

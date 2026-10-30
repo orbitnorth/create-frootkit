@@ -22,7 +22,7 @@ describe('⚡ create-frootkit Scaffolder', () => {
     assert.equal(pkg.scripts.dev, 'frootkit dev');
     assert.equal(pkg.scripts.build, 'frootkit build');
     assert.equal(pkg.scripts.start, 'frootkit start');
-    assert.ok(pkg.dependencies['frootkit']);
+    assert.ok(pkg.dependencies['froot-kit'] || pkg.dependencies['frootkit']);
     assert.ok(pkg.dependencies['preact']);
     assert.ok(pkg.devDependencies['tailwindcss']);
   });
