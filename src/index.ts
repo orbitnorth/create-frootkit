@@ -1,104 +1,363 @@
 #!/usr/bin/env node
 /**
  * create-frootkit CLI
- * The official project scaffolder for FrootKit (Next.js Alternative).
+ * The official project generator for FrootKit (Next.js Alternative).
  */
 
-import * as readline from 'node:readline/promises';
-import { stdin as input, stdout as output } from 'node:process';
 import * as path from 'node:path';
-import { scaffoldProject } from './scaffold.js';
+import * as fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import {
+  printBanner,
+  printStep,
+  printSuccess,
+  printError,
+  printNextSteps,
+  promptSelect,
+  promptText,
+  promptConfirm,
+  c,
+} from './ui.js';
+import { scaffoldProject, type ScaffoldOptions } from './scaffold.js';
+import type { DatabaseOption } from './addons/database.js';
+import type { LinterOption } from './addons/linter.js';
 
 export * from './template.js';
 export * from './scaffold.js';
+export * from './ui.js';
 
-async function main(): Promise<void> {
-  const args = process.argv.slice(2);
+const VERSION = '1.1.0';
 
-  if (args.includes('-h') || args.includes('--help')) {
-    console.log(`
-  ▲ create-frootkit — The Next.js Alternative Project Scaffolder
+interface ParsedArgs {
+  targetDir?: string;
+  pkgManager?: 'pnpm' | 'npm' | 'yarn' | 'bun';
+  db?: DatabaseOption;
+  linter?: LinterOption;
+  docker?: boolean;
+  agent?: boolean;
+  git?: boolean;
+  install?: boolean;
+  yes?: boolean;
+  help?: boolean;
+  version?: boolean;
+  schema?: boolean;
+}
 
-  Usage:
+function parseCliArgs(argv: string[]): ParsedArgs {
+  const raw = argv.slice(2);
+  const args: ParsedArgs = {};
+
+  for (let i = 0; i < raw.length; i++) {
+    const item = raw[i]!;
+
+    if (item === '--help' || item === '-h') {
+      args.help = true;
+    } else if (item === '--version' || item === '-v') {
+      args.version = true;
+    } else if (item === '--schema' || item === '--json-schema') {
+      args.schema = true;
+    } else if (item === '--yes' || item === '-y') {
+      args.yes = true;
+    } else if (item === '--git') {
+      args.git = true;
+    } else if (item === '--no-git') {
+      args.git = false;
+    } else if (item === '--install') {
+      args.install = true;
+    } else if (item === '--no-install') {
+      args.install = false;
+    } else if (item === '--docker') {
+      args.docker = true;
+    } else if (item === '--no-docker') {
+      args.docker = false;
+    } else if (item === '--agent' || item === '--ai') {
+      args.agent = true;
+    } else if (item === '--no-agent' || item === '--no-ai') {
+      args.agent = false;
+    } else if (item === '--biome') {
+      args.linter = 'biome';
+    } else if (item === '--eslint') {
+      args.linter = 'eslint';
+    } else if (item === '--linter') {
+      args.linter = raw[++i] as LinterOption;
+    } else if (item.startsWith('--linter=')) {
+      args.linter = item.split('=')[1] as LinterOption;
+    } else if (item === '--drizzle') {
+      args.db = 'drizzle';
+    } else if (item === '--prisma') {
+      args.db = 'prisma';
+    } else if (item === '--db' || item === '--database') {
+      args.db = raw[++i] as DatabaseOption;
+    } else if (item.startsWith('--db=')) {
+      args.db = item.split('=')[1] as DatabaseOption;
+    } else if (item === '--pm') {
+      args.pkgManager = raw[++i] as any;
+    } else if (item.startsWith('--pm=')) {
+      args.pkgManager = item.split('=')[1] as any;
+    } else if (!item.startsWith('-') && !args.targetDir) {
+      args.targetDir = item;
+    }
+  }
+
+  return args;
+}
+
+function printUsage(): void {
+  console.log(`
+  ${c.bold}Usage:${c.reset}
     npm create frootkit [project-directory] [options]
+    pnpm create frootkit [project-directory] [options]
+    bun create frootkit [project-directory] [options]
     npx create-frootkit [project-directory] [options]
 
-  Options:
-    -y, --yes          Accept all defaults non-interactively
-    --pm <manager>     Package manager: pnpm | npm | yarn | bun
-    --git / --no-git   Initialize git repository
-    --install          Install dependencies automatically
-    -h, --help         Show help message
+  ${c.bold}Options:${c.reset}
+    --pm <manager>           Package manager: pnpm | npm | yarn | bun
+    --db <orm>               Database ORM: none | drizzle | prisma
+    --linter <tool>          Linter & formatter: none | biome | eslint
+    --docker / --no-docker   Generate Dockerfile and docker-compose.yml
+    --agent / --no-agent     Generate AGENT.md & .cursorrules for AI coding assistants
+    --git / --no-git         Initialize git repository (default: true)
+    --install / --no-install Automatically install dependencies
+    --schema                 Output machine-readable JSON schema for AI agents
+    -y, --yes                Accept all defaults non-interactively
+    -v, --version            Display version
+    -h, --help               Display help information
 `);
-    process.exit(0);
+}
+
+function detectCurrentPackageManager(): 'pnpm' | 'npm' | 'yarn' | 'bun' {
+  const ua = process.env['npm_config_user_agent'] || '';
+  if (ua.includes('pnpm')) return 'pnpm';
+  if (ua.includes('bun')) return 'bun';
+  if (ua.includes('yarn')) return 'yarn';
+  return 'npm';
+}
+
+function printAgentSchema(): void {
+  const schema = {
+    $schema: 'https://json-schema.org/draft/2020-12/schema',
+    name: 'create-frootkit',
+    version: VERSION,
+    description: 'CLI generator for scaffolding high-performance FrootKit (Next.js alternative) web applications',
+    usage: 'npm create frootkit [project-directory] [options]',
+    nonInteractiveFlag: '-y or --yes',
+    options: {
+      packageManager: {
+        flag: '--pm <manager>',
+        choices: ['pnpm', 'npm', 'yarn', 'bun'],
+        default: 'auto-detected',
+        description: 'Package manager for dependency installation',
+      },
+      database: {
+        flag: '--db <orm>',
+        choices: ['none', 'drizzle', 'prisma'],
+        default: 'none',
+        description: 'Database ORM integration with SQLite starter',
+      },
+      linter: {
+        flag: '--linter <tool>',
+        choices: ['none', 'biome', 'eslint'],
+        default: 'none',
+        description: 'Linter and code quality formatter',
+      },
+      docker: {
+        flag: '--docker / --no-docker',
+        type: 'boolean',
+        default: false,
+        description: 'Generate multi-stage Docker container setup',
+      },
+      agentRules: {
+        flag: '--agent / --no-agent',
+        type: 'boolean',
+        default: true,
+        description: 'Generate AGENT.md and .cursorrules for AI assistants',
+      },
+      git: {
+        flag: '--git / --no-git',
+        type: 'boolean',
+        default: true,
+        description: 'Initialize a Git repository',
+      },
+      install: {
+        flag: '--install / --no-install',
+        type: 'boolean',
+        default: false,
+        description: 'Automatically install dependencies',
+      },
+    },
+  };
+  console.log(JSON.stringify(schema, null, 2));
+}
+
+async function main(): Promise<void> {
+  const args = parseCliArgs(process.argv);
+
+  if (args.schema) {
+    printAgentSchema();
+    return;
   }
 
-  let projectDir = args.find((a: string) => !a.startsWith('-')) || '';
-  const isNonInteractive = args.includes('-y') || args.includes('--yes');
-
-  if (!projectDir && isNonInteractive) {
-    projectDir = 'my-frootkit-app';
+  if (args.version) {
+    console.log(`create-frootkit v${VERSION}`);
+    return;
   }
 
-  let pkgManager: 'pnpm' | 'npm' | 'yarn' | 'bun' = 'npm';
-  const pmArg = args.indexOf('--pm');
-  if (pmArg !== -1 && args[pmArg + 1]) {
-    pkgManager = args[pmArg + 1] as any;
-  } else if (process.env.npm_config_user_agent?.includes('pnpm')) {
-    pkgManager = 'pnpm';
-  } else if (process.env.npm_config_user_agent?.includes('bun')) {
-    pkgManager = 'bun';
+  if (args.help) {
+    printBanner(VERSION);
+    printUsage();
+    return;
   }
 
-  let gitInit = args.includes('--git');
-  let installDeps = args.includes('--install');
+  printBanner(VERSION);
 
-  if (!isNonInteractive) {
-    const rl = readline.createInterface({ input, output });
+  const detectedPm = detectCurrentPackageManager();
 
-    console.log(`
-  ▲ FrootKit — Next.js Alternative Scaffolder
-  ──────────────────────────────────────────
-`);
-
-    if (!projectDir) {
-      projectDir = (await rl.question('  Project directory: (my-frootkit-app) ')).trim() || 'my-frootkit-app';
+  // 1. Target Directory & Project Name
+  let targetDir = args.targetDir;
+  if (!targetDir) {
+    if (args.yes) {
+      targetDir = 'my-frootkit-app';
+    } else {
+      printStep(1, 6, 'Project Directory');
+      targetDir = await promptText('Directory name:', 'my-frootkit-app', (input) => {
+        if (!input.trim()) return 'Project name cannot be empty';
+        return true;
+      });
+      console.log();
     }
-
-    const gitAnswer = (await rl.question('  Initialize git repository? (Y/n) ')).trim().toLowerCase();
-    gitInit = gitAnswer === '' || gitAnswer === 'y' || gitAnswer === 'yes';
-
-    const installAnswer = (await rl.question(`  Install dependencies with ${pkgManager}? (y/N) `)).trim().toLowerCase();
-    installDeps = installAnswer === 'y' || installAnswer === 'yes';
-
-    rl.close();
   }
 
-  const targetDir = path.resolve(process.cwd(), projectDir);
-  const projectName = path.basename(targetDir);
+  const resolvedTarget = path.resolve(process.cwd(), targetDir);
+  const projectName = path.basename(resolvedTarget);
 
-  console.log(`\n  Creating FrootKit application in ${targetDir}...`);
-  const result = await scaffoldProject({
-    targetDir,
+  if (fs.existsSync(resolvedTarget)) {
+    const existing = fs.readdirSync(resolvedTarget);
+    if (existing.length > 0 && !args.yes) {
+      const proceed = await promptConfirm(
+        `Directory "${targetDir}" is not empty. Continue anyway?`,
+        false
+      );
+      if (!proceed) {
+        printError('Aborted by user.');
+        process.exit(1);
+      }
+      console.log();
+    }
+  }
+
+  // 2. Package Manager Selection
+  let pkgManager = args.pkgManager;
+  if (!pkgManager) {
+    if (args.yes) {
+      pkgManager = detectedPm;
+    } else {
+      printStep(2, 6, 'Package Manager');
+      pkgManager = await promptSelect<'pnpm' | 'npm' | 'yarn' | 'bun'>(
+        'Choose your package manager:',
+        [
+          { value: 'pnpm', label: 'pnpm', hint: 'Fast, disk space efficient (recommended)' },
+          { value: 'npm', label: 'npm', hint: 'Standard Node.js package manager' },
+          { value: 'bun', label: 'bun', hint: 'All-in-one JavaScript runtime & toolkit' },
+          { value: 'yarn', label: 'yarn', hint: 'Classic package manager' },
+        ],
+        ['pnpm', 'npm', 'bun', 'yarn'].indexOf(detectedPm) >= 0
+          ? ['pnpm', 'npm', 'bun', 'yarn'].indexOf(detectedPm)
+          : 0
+      );
+      console.log();
+    }
+  }
+
+  // 3. Database ORM Selection
+  let db = args.db;
+  if (!db) {
+    if (args.yes) {
+      db = 'none';
+    } else {
+      printStep(3, 6, 'Database / ORM');
+      db = await promptSelect<DatabaseOption>(
+        'Include a database integration?',
+        [
+          { value: 'none', label: 'None', hint: 'No database / static & API starters' },
+          { value: 'drizzle', label: 'Drizzle ORM', hint: 'TypeScript ORM with SQLite starter & Studio' },
+          { value: 'prisma', label: 'Prisma', hint: 'Next-gen ORM with SQLite starter' },
+        ],
+        0
+      );
+      console.log();
+    }
+  }
+
+  // 4. Linter & Formatter Selection
+  let linter = args.linter;
+  if (!linter) {
+    if (args.yes) {
+      linter = 'none';
+    } else {
+      printStep(4, 6, 'Linter & Formatter');
+      linter = await promptSelect<LinterOption>(
+        'Include code quality and linting tools?',
+        [
+          { value: 'none', label: 'None', hint: 'Standard TypeScript compiler only' },
+          { value: 'biome', label: 'Biome', hint: 'Ultra-fast Rust-based linter and formatter' },
+          { value: 'eslint', label: 'ESLint + Prettier', hint: 'Classic ecosystem standard' },
+        ],
+        0
+      );
+      console.log();
+    }
+  }
+
+  // 5. AI Rules & Docker
+  let agent = args.agent ?? true;
+  let docker = args.docker ?? false;
+
+  // 6. Git & Install
+  let gitInit = args.git;
+  if (gitInit === undefined) {
+    if (args.yes) {
+      gitInit = true;
+    } else {
+      printStep(5, 6, 'Git Repository');
+      gitInit = await promptConfirm('Initialize a new Git repository?', true);
+      console.log();
+    }
+  }
+
+  let installDeps = args.install;
+  if (installDeps === undefined) {
+    if (args.yes) {
+      installDeps = false;
+    } else {
+      printStep(6, 6, 'Dependencies');
+      installDeps = await promptConfirm(`Install dependencies with ${pkgManager}?`, true);
+      console.log();
+    }
+  }
+
+  console.log(`  Creating FrootKit application in ${c.cyan}${resolvedTarget}${c.reset}...`);
+  const scaffoldResult = await scaffoldProject({
+    targetDir: resolvedTarget,
     projectName,
     pkgManager,
+    db,
+    linter,
+    docker,
+    agent,
     gitInit,
     installDeps,
   });
 
-  console.log(`
-  ✓ Created ${result.fileCount} files
-  ${gitInit ? '✓ Initialized git repository\n' : ''}
-  Success! Next steps:
-    $ cd ${projectDir}
-    $ ${pkgManager} install
-    $ ${pkgManager} run dev
+  printSuccess(`Created ${scaffoldResult.fileCount} project files`);
+  if (gitInit) {
+    printSuccess('Initialized Git repository');
+  }
+  if (installDeps) {
+    printSuccess(`Installed dependencies with ${pkgManager}`);
+  }
 
-  Server starts on http://localhost:3000
-`);
+  printNextSteps(targetDir, pkgManager, installDeps);
 }
-
-import { fileURLToPath } from 'node:url';
 
 // Only execute when invoked directly as CLI
 const thisFile = fileURLToPath(import.meta.url);
@@ -112,9 +371,9 @@ const isDirectCli =
   invokedFile.endsWith('create-froot-fullstack\\dist\\index.js') ||
   invokedFile.endsWith('create-froot-fullstack/dist/index.js');
 
-if (isDirectCli && !process.env['NODE_TEST_CONTEXT']) {
+if (isDirectCli) {
   main().catch((err) => {
-    console.error('Fatal CLI error:', err);
+    printError(`Fatal error: ${err.message || err}`);
     process.exit(1);
   });
 }

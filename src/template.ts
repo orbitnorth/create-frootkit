@@ -20,8 +20,8 @@ export function generateFrootKitTemplate(projectName: string): TemplateFileMap {
           start: 'frootkit start',
         },
         dependencies: {
-          frootkit: 'npm:froot-kit@^1.2.4',
-          'froot-kit': '^1.2.4',
+          frootkit: 'npm:froot-kit@^1.3.0',
+          'froot-kit': '^1.3.0',
           frootjs: '^1.0.6',
           preact: '^11.1.0',
           'preact-render-to-string': '^6.8.2',
@@ -160,6 +160,32 @@ export default function HomePage() {
         </a>
       </div>
     </div>
+  );
+}
+`,
+
+    'src/app/api/health/route.ts': `/**
+ * Next.js-Style API Route for FrootKit.
+ * Runs directly on top of high-performance Froot router.
+ */
+
+export async function GET() {
+  return Response.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    framework: 'frootkit',
+  });
+}
+
+export async function POST(request: Request) {
+  const body = await request.json().catch(() => ({}));
+  return Response.json(
+    {
+      message: 'Payload received',
+      data: body,
+      receivedAt: new Date().toISOString(),
+    },
+    { status: 201 }
   );
 }
 `,
