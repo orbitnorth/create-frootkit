@@ -7,6 +7,7 @@ import { applyDatabaseAddon, type DatabaseOption } from './addons/database.js';
 import { applyLinterAddon, type LinterOption } from './addons/linter.js';
 import { applyAgentAddon } from './addons/agent.js';
 import { applyDockerAddon } from './addons/docker.js';
+import { Spinner } from './ui.js';
 
 const execAsync = promisify(exec);
 
@@ -22,7 +23,13 @@ export interface ScaffoldOptions {
   installDeps?: boolean;
 }
 
-export async function scaffoldProject(options: ScaffoldOptions): Promise<{ fileCount: number }> {
+export interface ScaffoldResult {
+  fileCount: number;
+  gitInitialized: boolean;
+  depsInstalled: boolean;
+}
+
+export async function scaffoldProject(options: ScaffoldOptions): Promise<ScaffoldResult> {
   const {
     targetDir,
     projectName,
@@ -37,6 +44,7 @@ export async function scaffoldProject(options: ScaffoldOptions): Promise<{ fileC
 
   await fs.mkdir(targetDir, { recursive: true });
 
+  const writeSpinner = new Spinner('Scaffolding FrootKit application').start();
   const files = generateFrootKitTemplate(projectName);
 
   // Apply Add-ons
@@ -61,23 +69,34 @@ export async function scaffoldProject(options: ScaffoldOptions): Promise<{ fileC
     await fs.writeFile(fullPath, files[relPath]!, 'utf8');
   }
 
+  writeSpinner.stop(`Created ${filePaths.length} project files`);
+
+  let gitInitialized = false;
   if (gitInit) {
+    const gitSpinner = new Spinner('Initializing Git repository').start();
     try {
       await execAsync('git init', { cwd: targetDir });
+      gitInitialized = true;
+      gitSpinner.stop('Initialized Git repository');
     } catch {
-      // ignore git init errors
+      gitSpinner.fail('Could not initialize Git repository');
     }
   }
 
+  let depsInstalled = false;
   if (installDeps) {
+    const depSpinner = new Spinner(`Installing dependencies with ${pkgManager}`, true).start();
     try {
       const isWin = process.platform === 'win32';
       const cmd = isWin && pkgManager !== 'bun' ? `${pkgManager}.cmd` : pkgManager;
       await execAsync(`${cmd} install`, { cwd: targetDir });
-    } catch {
-      // ignore install errors
+      depsInstalled = true;
+      depSpinner.stop(`Installed dependencies with ${pkgManager}`);
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      depSpinner.fail(`Dependency install skipped: ${errMsg}`);
     }
   }
 
-  return { fileCount: filePaths.length };
+  return { fileCount: filePaths.length, gitInitialized, depsInstalled };
 }

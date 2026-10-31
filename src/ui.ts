@@ -125,6 +125,70 @@ export function printError(message: string): void {
 }
 
 // ---------------------------------------------------------------------------
+// Animated Terminal Spinner
+// ---------------------------------------------------------------------------
+
+export class Spinner {
+  private frames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
+  private current = 0;
+  private timer?: NodeJS.Timeout;
+  private text: string;
+  private startTime: number = Date.now();
+  private showTimer: boolean;
+
+  constructor(text: string, showTimer = false) {
+    this.text = text;
+    this.showTimer = showTimer;
+  }
+
+  update(text: string): this {
+    this.text = text;
+    return this;
+  }
+
+  start(): this {
+    this.startTime = Date.now();
+    if (!process.stdout.isTTY) {
+      console.log(`  ${c.gray}${this.text}...${c.reset}`);
+      return this;
+    }
+    process.stdout.write('\x1b[?25l');
+    this.timer = setInterval(() => {
+      const frame = this.frames[this.current % this.frames.length];
+      this.current++;
+      const elapsed = this.showTimer
+        ? ` ${c.gray}(${((Date.now() - this.startTime) / 1000).toFixed(1)}s)${c.reset}`
+        : '';
+      process.stdout.write(`\r  ${c.emerald}${frame}${c.reset} ${this.text}${elapsed}`);
+    }, 80);
+    return this;
+  }
+
+  stop(successMessage?: string): void {
+    if (this.timer) clearInterval(this.timer);
+    if (process.stdout.isTTY) {
+      process.stdout.write('\r\x1b[2K');
+      process.stdout.write('\x1b[?25h');
+    }
+    if (successMessage) {
+      const elapsed = this.showTimer
+        ? ` ${c.gray}(${((Date.now() - this.startTime) / 1000).toFixed(1)}s)${c.reset}`
+        : '';
+      console.log(`  ${c.emerald}✓${c.reset} ${successMessage}${elapsed}`);
+    }
+  }
+
+  fail(errorMessage: string): void {
+    if (this.timer) clearInterval(this.timer);
+    if (process.stdout.isTTY) {
+      process.stdout.write('\r\x1b[2K');
+      process.stdout.write('\x1b[?25h');
+    }
+    console.log(`  ${c.rose}✕${c.reset} ${c.rose}${errorMessage}${c.reset}`);
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Interactive Terminal Prompts
 // ---------------------------------------------------------------------------
 

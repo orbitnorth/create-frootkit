@@ -26,7 +26,7 @@ export * from './template.js';
 export * from './scaffold.js';
 export * from './ui.js';
 
-const VERSION = '1.1.1';
+const VERSION = '1.1.2';
 
 interface ParsedArgs {
   targetDir?: string;
@@ -342,7 +342,7 @@ async function main(): Promise<void> {
     }
   }
 
-  console.log(`  Creating FrootKit application in ${c.cyan}${resolvedTarget}${c.reset}...`);
+  console.log(`  Creating FrootKit application in ${c.cyan}${resolvedTarget}${c.reset}...\n`);
   const scaffoldResult = await scaffoldProject({
     targetDir: resolvedTarget,
     projectName,
@@ -355,15 +355,7 @@ async function main(): Promise<void> {
     installDeps,
   });
 
-  printSuccess(`Created ${scaffoldResult.fileCount} project files`);
-  if (gitInit) {
-    printSuccess('Initialized Git repository');
-  }
-  if (installDeps) {
-    printSuccess(`Installed dependencies with ${pkgManager}`);
-  }
-
-  printNextSteps(targetDir, pkgManager, installDeps);
+  printNextSteps(targetDir, pkgManager, scaffoldResult.depsInstalled);
 }
 
 // Only execute when invoked directly as CLI
