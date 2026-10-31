@@ -12,7 +12,7 @@ import {
   saveSession,
   deleteSession,
   type User,
-} from '@/lib/auth.js';
+} from '@/lib/auth';
 
 export async function GET(req: Request): Promise<Response> {
   const url = new URL(req.url);
@@ -133,6 +133,19 @@ export async function POST(req: Request): Promise<Response> {
       expiresAt: new Date(Date.now() + 86400 * 7 * 1000).toISOString(),
     });
 
+    const isJsonReq = (req.headers.get('accept') || '').includes('application/json') || contentType.includes('application/json');
+    if (isJsonReq) {
+      return Response.json(
+        { success: true, user },
+        {
+          status: 200,
+          headers: {
+            'Set-Cookie': createSessionCookie(token),
+          },
+        }
+      );
+    }
+
     return new Response(null, {
       status: 302,
       headers: {
@@ -145,12 +158,12 @@ export async function POST(req: Request): Promise<Response> {
   // Default: Login
   const record = await findUserByEmail(email);
   if (!record) {
-    return Response.json({ error: 'Invalid credentials' }, { status: 401 });
+    return Response.json({ error: 'Invalid email or password' }, { status: 401 });
   }
 
   const isValid = await verifyPassword(password, record.passwordHash);
   if (!isValid) {
-    return Response.json({ error: 'Invalid credentials' }, { status: 401 });
+    return Response.json({ error: 'Invalid email or password' }, { status: 401 });
   }
 
   const token = createSessionToken();
@@ -160,6 +173,19 @@ export async function POST(req: Request): Promise<Response> {
     userId: record.user.id,
     expiresAt: new Date(Date.now() + 86400 * 7 * 1000).toISOString(),
   });
+
+  const isJsonReq = (req.headers.get('accept') || '').includes('application/json') || contentType.includes('application/json');
+  if (isJsonReq) {
+    return Response.json(
+      { success: true, user: record.user },
+      {
+        status: 200,
+        headers: {
+          'Set-Cookie': createSessionCookie(token),
+        },
+      }
+    );
+  }
 
   return new Response(null, {
     status: 302,

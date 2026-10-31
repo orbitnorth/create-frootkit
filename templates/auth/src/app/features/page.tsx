@@ -130,3 +130,4 @@ const html = renderToString(<DashboardOverview data={telemetry} />);
     </div>
   );
 }
+

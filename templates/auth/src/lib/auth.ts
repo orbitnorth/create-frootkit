@@ -1,4 +1,6 @@
 import { webcrypto } from 'node:crypto';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 const crypto = globalThis.crypto || webcrypto;
 
@@ -17,9 +19,42 @@ export interface Session {
   expiresAt: string;
 }
 
-// In-memory fallback stores (used when no database is attached)
+// In-memory fallback stores with disk persistence
 const USERS_STORE = new Map<string, { user: User; passwordHash: string }>();
 const SESSIONS_STORE = new Map<string, Session>();
+
+const STORE_PATH = path.resolve(process.cwd(), '.froot_auth_store.json');
+
+function loadPersistedStores() {
+  try {
+    if (fs.existsSync(STORE_PATH)) {
+      const raw = fs.readFileSync(STORE_PATH, 'utf-8');
+      const data = JSON.parse(raw);
+      if (Array.isArray(data.users)) {
+        for (const item of data.users) {
+          USERS_STORE.set(item.email, item);
+        }
+      }
+      if (Array.isArray(data.sessions)) {
+        for (const item of data.sessions) {
+          SESSIONS_STORE.set(item.token, item);
+        }
+      }
+    }
+  } catch {}
+}
+
+function persistStores() {
+  try {
+    const data = {
+      users: Array.from(USERS_STORE.values()),
+      sessions: Array.from(SESSIONS_STORE.values()),
+    };
+    fs.writeFileSync(STORE_PATH, JSON.stringify(data, null, 2), 'utf-8');
+  } catch {}
+}
+
+loadPersistedStores();
 
 /**
  * Derives a PBKDF2 HMAC-SHA256 password hash using the standard Web Crypto API.
@@ -126,7 +161,7 @@ export function createSessionCookie(token: string, maxAgeSeconds: number = 86400
  * Clears the session cookie.
  */
 export function clearSessionCookie(): string {
-  return 'froot_session=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0';
+  return 'froot_session=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT';
 }
 
 /**
@@ -198,6 +233,7 @@ export async function saveUser(user: User, passwordHash: string): Promise<void> 
     });
   } catch {}
   USERS_STORE.set(user.email, { user, passwordHash });
+  persistStores();
 }
 
 /**
@@ -215,6 +251,7 @@ export async function saveSession(session: Session): Promise<void> {
     });
   } catch {}
   SESSIONS_STORE.set(session.token, session);
+  persistStores();
 }
 
 /**
@@ -250,19 +287,23 @@ export async function deleteSession(token: string): Promise<void> {
     await db.delete(sessions).where(eq(sessions.token, token));
   } catch {}
   SESSIONS_STORE.delete(token);
+  persistStores();
 }
 
-// Pre-populate demo user: admin@frootkit.dev / password123
+// Pre-populate demo user if no users exist
 (async () => {
-  const demoHash = await hashPassword('password123');
-  const demoUser: User = {
-    id: 'usr_demo_admin',
-    email: 'admin@frootkit.dev',
-    name: 'Sarah Connor',
-    role: 'admin',
-    createdAt: new Date().toISOString(),
-  };
-  USERS_STORE.set(demoUser.email, { user: demoUser, passwordHash: demoHash });
+  if (USERS_STORE.size === 0) {
+    const demoHash = await hashPassword('password123');
+    const demoUser: User = {
+      id: 'usr_demo_admin',
+      email: 'admin@frootkit.dev',
+      name: 'Sarah Connor',
+      role: 'admin',
+      createdAt: new Date().toISOString(),
+    };
+    USERS_STORE.set(demoUser.email, { user: demoUser, passwordHash: demoHash });
+    persistStores();
+  }
 })();
 
 export { USERS_STORE, SESSIONS_STORE };

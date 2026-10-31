@@ -328,11 +328,25 @@ export function DashboardNav({ currentPath = '/dashboard' }: DashboardNavProps) 
               } catch(e) {}
 
               fetch('/api/auth')
-                .then(function(res) { return res.ok ? res.json() : null; })
+                .then(function(res) {
+                  if (!res.ok) {
+                    try { localStorage.removeItem('froot_auth_user'); } catch(e) {}
+                    if (window.location.pathname.startsWith('/dashboard')) {
+                      window.location.href = '/login';
+                    }
+                    return null;
+                  }
+                  return res.json();
+                })
                 .then(function(data) {
                   if (data && data.authenticated && data.user) {
                     try { localStorage.setItem('froot_auth_user', JSON.stringify(data.user)); } catch(e) {}
                     updateUI(data.user);
+                  } else {
+                    try { localStorage.removeItem('froot_auth_user'); } catch(e) {}
+                    if (window.location.pathname.startsWith('/dashboard')) {
+                      window.location.href = '/login';
+                    }
                   }
                 })
                 .catch(function() {});

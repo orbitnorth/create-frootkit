@@ -21,9 +21,18 @@ export function AuthForm({ mode }: AuthFormProps) {
 
       {isLogin && (
         <div class="mb-5 p-3 rounded-md bg-[#f6f9fc] border border-[#e6ebf1] text-xs">
-          <div class="flex items-center gap-1.5 text-[#425466] text-[12px] mb-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-[#24b47e]" />
-            <span class="font-medium text-[#0a2540]">Demo Credentials:</span>
+          <div class="flex items-center justify-between mb-1.5">
+            <div class="flex items-center gap-1.5 text-[#425466] text-[12px]">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#24b47e]" />
+              <span class="font-medium text-[#0a2540]">Demo Account:</span>
+            </div>
+            <button
+              type="button"
+              onclick="var e=document.getElementById('email'),p=document.getElementById('password');if(e)e.value='admin@frootkit.dev';if(p)p.value='password123';"
+              class="text-[11px] text-[#635bff] hover:underline font-semibold cursor-pointer"
+            >
+              Fill Demo Login
+            </button>
           </div>
           <div class="font-mono text-[#0a2540] text-[12px] bg-white px-2.5 py-1 rounded border border-[#e6ebf1] flex items-center justify-between">
             <span>admin@frootkit.dev</span>
@@ -33,10 +42,61 @@ export function AuthForm({ mode }: AuthFormProps) {
         </div>
       )}
 
+      {/* Error alert container */}
+      <div
+        id="auth-error"
+        class="hidden mb-4 p-3 rounded-md bg-[#fff1f0] border border-[#ffccc7] text-[#cf1322] text-xs font-medium"
+        role="alert"
+      />
+
       <form
+        id="auth-form"
         action={`/api/auth?action=${mode}`}
         method="POST"
-        onsubmit="try{localStorage.setItem('froot_auth_user',JSON.stringify({email:this.email.value,name:this.name?this.name.value:''}))}catch(e){}"
+        onsubmit={`
+          event.preventDefault();
+          var form = this;
+          var errEl = document.getElementById('auth-error');
+          var btn = document.getElementById('auth-submit-btn');
+          if (errEl) { errEl.classList.add('hidden'); errEl.textContent = ''; }
+          if (btn) { btn.disabled = true; btn.textContent = 'Please wait...'; }
+          
+          var payload = {
+            email: form.email.value.trim(),
+            password: form.password.value,
+            name: form.name ? form.name.value.trim() : ''
+          };
+          
+          fetch(form.action, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify(payload)
+          })
+          .then(function(res) {
+            return res.json().then(function(data) {
+              if (!res.ok) {
+                throw new Error(data.error || 'Authentication failed');
+              }
+              return data;
+            });
+          })
+          .then(function(data) {
+            if (data && data.user) {
+              try { localStorage.setItem('froot_auth_user', JSON.stringify(data.user)); } catch(e) {}
+            }
+            window.location.href = '/dashboard';
+          })
+          .catch(function(err) {
+            if (errEl) {
+              errEl.textContent = err.message || 'Something went wrong';
+              errEl.classList.remove('hidden');
+            }
+            if (btn) {
+              btn.disabled = false;
+              btn.textContent = '${isLogin ? 'Sign In' : 'Create Account'}';
+            }
+          });
+        `}
         class="space-y-4"
       >
         {!isLogin && (
@@ -64,7 +124,6 @@ export function AuthForm({ mode }: AuthFormProps) {
             type="email"
             name="email"
             placeholder="you@company.com"
-            defaultValue={isLogin ? 'admin@frootkit.dev' : ''}
             required
             class="inp"
           />
@@ -79,15 +138,15 @@ export function AuthForm({ mode }: AuthFormProps) {
             type="password"
             name="password"
             placeholder="••••••••••••"
-            defaultValue={isLogin ? 'password123' : ''}
             required
             class="inp"
           />
         </div>
 
         <button
+          id="auth-submit-btn"
           type="submit"
-          class="btn btn-p w-full py-2.5 text-sm font-medium mt-2"
+          class="btn btn-p w-full py-2.5 text-sm font-medium mt-2 cursor-pointer"
         >
           {isLogin ? 'Sign In' : 'Create Account'}
         </button>
