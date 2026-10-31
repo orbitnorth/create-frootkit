@@ -7,9 +7,8 @@ export function Navbar() {
         </a>
 
         <div class="hidden items-center gap-8 text-[15px] font-medium md:flex">
-          <a href="#features" class="opacity-90 hover:opacity-100 transition-opacity">Product</a>
-          <a href="#developers" class="opacity-90 hover:opacity-100 transition-opacity">Developers</a>
-          <a href="#pricing" class="opacity-90 hover:opacity-100 transition-opacity">Pricing</a>
+          <a href="/features" class="opacity-90 hover:opacity-100 transition-opacity">Features</a>
+          <a href="/pricing" class="opacity-90 hover:opacity-100 transition-opacity">Pricing</a>
           <a href="/dashboard" class="opacity-90 hover:opacity-100 transition-opacity">Dashboard</a>
         </div>
 
