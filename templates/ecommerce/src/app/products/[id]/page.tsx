@@ -1,6 +1,6 @@
-import { getProduct, PRODUCTS } from '../../../data/products.js';
-import { Navbar } from '../../../components/Navbar.js';
-import { Footer } from '../../../components/Footer.js';
+import { getProduct, PRODUCTS } from '@/data/products.js';
+import { Navbar } from '@/components/Navbar.js';
+import { Footer } from '@/components/Footer.js';
 
 export async function generateStaticParams() {
   return PRODUCTS.map((p) => ({ id: p.id }));

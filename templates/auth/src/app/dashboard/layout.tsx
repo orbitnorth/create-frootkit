@@ -1,5 +1,5 @@
 import type { ComponentChildren } from 'preact';
-import { DashboardNav } from '../../components/DashboardNav.js';
+import { DashboardNav } from '@/components/DashboardNav.js';
 
 export default function DashboardLayout({ children }: { children: ComponentChildren }) {
   return (

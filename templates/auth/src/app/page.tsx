@@ -1,4 +1,4 @@
-import { Navbar } from '../components/Navbar.js';
+import { Navbar } from '@/components/Navbar.js';
 
 export const metadata = {
   title: 'FrootAuth — Authentication & Revenue Infrastructure',

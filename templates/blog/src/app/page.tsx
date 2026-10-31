@@ -1,8 +1,8 @@
-import { getPosts } from '../data/posts.js';
-import { Navbar } from '../components/Navbar.js';
-import { PostCard } from '../components/PostCard.js';
-import { Newsletter } from '../components/Newsletter.js';
-import { Footer } from '../components/Footer.js';
+import { getPosts } from '@/data/posts.js';
+import { Navbar } from '@/components/Navbar.js';
+import { PostCard } from '@/components/PostCard.js';
+import { Newsletter } from '@/components/Newsletter.js';
+import { Footer } from '@/components/Footer.js';
 
 export const metadata = {
   title: 'Dispatch — Notes on building modern web software',

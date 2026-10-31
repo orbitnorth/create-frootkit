@@ -1,5 +1,5 @@
-import { Navbar } from '../../components/Navbar.js';
-import { AuthForm } from '../../components/AuthForm.js';
+import { Navbar } from '@/components/Navbar.js';
+import { AuthForm } from '@/components/AuthForm.js';
 
 export const metadata = {
   title: 'Sign In — FrootAuth',

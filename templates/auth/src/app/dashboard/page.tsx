@@ -1,4 +1,4 @@
-import { MetricCard } from '../../components/MetricCard.js';
+import { MetricCard } from '@/components/MetricCard.js';
 
 export const metadata = {
   title: 'Workspace Overview — FrootAuth',

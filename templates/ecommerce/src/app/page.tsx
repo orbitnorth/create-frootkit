@@ -1,7 +1,7 @@
-import { getProducts } from '../data/products.js';
-import { Navbar } from '../components/Navbar.js';
-import { ProductCard } from '../components/ProductCard.js';
-import { Footer } from '../components/Footer.js';
+import { getProducts } from '@/data/products.js';
+import { Navbar } from '@/components/Navbar.js';
+import { ProductCard } from '@/components/ProductCard.js';
+import { Footer } from '@/components/Footer.js';
 
 export const metadata = {
   title: 'Parcel — Everyday objects, well made',

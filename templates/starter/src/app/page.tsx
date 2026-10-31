@@ -1,6 +1,6 @@
-import { Header } from '../components/Header.js';
-import { FeatureCard } from '../components/FeatureCard.js';
-import { Footer } from '../components/Footer.js';
+import { Header } from '@/components/Header.js';
+import { FeatureCard } from '@/components/FeatureCard.js';
+import { Footer } from '@/components/Footer.js';
 
 export const metadata = {
   title: 'FrootKit — The Fullstack Preact Framework',

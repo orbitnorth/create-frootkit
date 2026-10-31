@@ -33,3 +33,4 @@ export default function DashboardNotFound({ currentPath }: DashboardNotFoundProp
     </div>
   );
 }
+

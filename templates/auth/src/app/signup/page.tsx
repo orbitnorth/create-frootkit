@@ -1,4 +1,4 @@
-import { AuthForm } from '../../components/AuthForm.js';
+import { AuthForm } from '@/components/AuthForm.js';
 
 export const metadata = {
   title: 'Sign Up — FrootAuth',
