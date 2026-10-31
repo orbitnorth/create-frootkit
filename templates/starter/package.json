@@ -8,7 +8,7 @@
     "start": "frootkit start"
   },
   "dependencies": {
-    "frootkit": "npm:froot-kit@^1.3.6",
+    "frootkit": "npm:froot-kit@^1.3.7",
     "frootui": "^1.0.4",
     "frootjs": "^1.0.6",
     "preact": "^11.1.0",
