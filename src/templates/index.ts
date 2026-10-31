@@ -29,6 +29,33 @@ export function getTemplateDir(templateId: TemplateId): string {
   throw new Error(`Template directory not found for template "${templateId}".`);
 }
 
+export const DEFAULT_GITIGNORE = `# Dependencies
+node_modules/
+.pnpm-store/
+
+# FrootKit build output
+.froot/
+dist/
+.cache/
+
+# Database Journals & Temporary files (keeps sqlite.db visible in project)
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Environment
+.env
+.env.local
+.env.production
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
+`;
+
 /**
  * Reads all files from the physical template directory recursively.
  */
@@ -39,7 +66,14 @@ export function readTemplateFiles(templateId: TemplateId, projectName: string): 
   const walk = (currentDir: string, base: string = '') => {
     const entries = fs.readdirSync(currentDir, { withFileTypes: true });
     for (const entry of entries) {
-      const rel = base ? `${base}/${entry.name}` : entry.name;
+      // NPM automatically renames .gitignore to .npmignore on publish.
+      // We map .npmignore and _gitignore to .gitignore so scaffolded projects always have .gitignore.
+      let targetName = entry.name;
+      if (targetName === '.npmignore' || targetName === '_gitignore' || targetName === 'gitignore') {
+        targetName = '.gitignore';
+      }
+
+      const rel = base ? `${base}/${targetName}` : targetName;
       const full = path.join(currentDir, entry.name);
       if (entry.isDirectory()) {
         walk(full, rel);
@@ -52,6 +86,12 @@ export function readTemplateFiles(templateId: TemplateId, projectName: string): 
   };
 
   walk(dir);
+
+  // Guarantee .gitignore is always present in every scaffolded project
+  if (!files['.gitignore']) {
+    files['.gitignore'] = DEFAULT_GITIGNORE;
+  }
+
   return files;
 }
 

@@ -60,6 +60,9 @@ const client = createClient({
 export const db = drizzle(client, { schema });
 `;
 
+    // Initialize the visible SQLite database file inside the project root
+    files['sqlite.db'] = '';
+
     if (templateId === 'blog') {
       files['src/db/schema.ts'] = `import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 
@@ -325,6 +328,9 @@ seed().catch(console.error);
 
 export const prisma = new PrismaClient();
 `;
+
+    // Initialize the visible Prisma SQLite database file inside prisma/ directory
+    files['prisma/dev.db'] = '';
 
     if (templateId === 'blog') {
       files['prisma/schema.prisma'] = `datasource db {

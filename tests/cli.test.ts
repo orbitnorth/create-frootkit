@@ -22,6 +22,10 @@ describe('⚡ create-frootkit Scaffolder', () => {
   it('generates complete starter template file map for Next.js alternative with API routes', () => {
     const files = generateFrootKitTemplate('test-app', 'starter');
     assert.ok(files['package.json']);
+    assert.ok(files['.gitignore'], 'Must generate .gitignore');
+    assert.ok(files['.gitignore']!.includes('.froot/'), '.gitignore must ignore .froot/');
+    assert.ok(files['.gitignore']!.includes('*.db-journal'), '.gitignore must ignore *.db-journal');
+    assert.ok(!files['.gitignore']!.includes('\n*.db\n'), '.gitignore must not ignore *.db');
     assert.ok(files['src/app/layout.tsx']);
     assert.ok(files['src/app/page.tsx']);
     assert.ok(files['src/app/api/health/route.ts'], 'Must generate health API route');
@@ -81,6 +85,9 @@ describe('⚡ create-frootkit Scaffolder', () => {
 
     const seedContent = await fs.readFile(path.join(tempDir, 'src/db/seed.ts'), 'utf8');
     assert.ok(seedContent.includes('Seeding blog database'), 'Must have blog seed script');
+
+    const hasSqliteDb = await fs.stat(path.join(tempDir, 'sqlite.db'));
+    assert.ok(hasSqliteDb.isFile(), 'Must include visible sqlite.db in project folder');
 
     await fs.rm(tempDir, { recursive: true, force: true });
   });

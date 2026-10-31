@@ -2,7 +2,7 @@ import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
-import { generateFrootKitTemplate } from './template.js';
+import { generateFrootKitTemplate, DEFAULT_GITIGNORE } from './template.js';
 import { applyDatabaseAddon, type DatabaseOption } from './addons/database.js';
 import { applyLinterAddon, type LinterOption } from './addons/linter.js';
 import { applyAgentAddon } from './addons/agent.js';
@@ -61,6 +61,11 @@ export async function scaffoldProject(options: ScaffoldOptions): Promise<Scaffol
   }
   if (agent) {
     applyAgentAddon(files, projectName);
+  }
+
+  // Ensure .gitignore is guaranteed to be included in the project
+  if (!files['.gitignore']) {
+    files['.gitignore'] = DEFAULT_GITIGNORE;
   }
 
   const filePaths = Object.keys(files);

@@ -7,9 +7,10 @@ node_modules/
 dist/
 .cache/
 
-# Databases
-*.db
+# Database Journals & Temporary files (keeps sqlite.db visible in project)
 *.db-journal
+*.db-wal
+*.db-shm
 
 # Environment
 .env

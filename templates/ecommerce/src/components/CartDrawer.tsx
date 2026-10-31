@@ -27,7 +27,7 @@ export function CartDrawer() {
             />
             <div class="flex-1 min-w-0">
               <h4 class="text-sm font-semibold text-white truncate">{product.name}</h4>
-              <div class="text-xs text-slate-400 font-mono mt-0.5">Qty: {quantity} &times; ${product.price.toFixed(2)}</div>
+              <div class="text-xs text-slate-400 font-mono mt-0.5">Qty: {quantity} × ${product.price.toFixed(2)}</div>
             </div>
             <div class="font-bold text-sm text-white font-mono">
               ${(product.price * quantity).toFixed(2)}
