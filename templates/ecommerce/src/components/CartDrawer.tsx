@@ -56,7 +56,7 @@ export function CartDrawer() {
           type="submit"
           class="w-full py-3 rounded-lg bg-emerald-500 text-slate-950 font-semibold text-sm hover:bg-emerald-400 transition-colors"
         >
-          Proceed to Checkout &rarr;
+          Proceed to Checkout →
         </button>
       </form>
     </div>

@@ -8,9 +8,9 @@ export default function DashboardLayout({ children }: { children: ComponentChild
       <div class="flex-1 flex flex-col min-w-0">
         <header class="h-16 border-b border-[#1a2333] px-8 flex items-center justify-between bg-[#06090f]">
           <div class="flex items-center gap-3">
-            <h1 class="text-sm font-bold text-white">Cluster: US-East Production</h1>
+            <h1 class="text-sm font-semibold text-white">Cluster: US-East Production</h1>
             <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[10px] font-mono border border-emerald-500/20 font-semibold">
-              Live &bull; 99.99% Uptime
+              Live • 99.99% Uptime
             </span>
           </div>
 

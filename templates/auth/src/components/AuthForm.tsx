@@ -12,7 +12,7 @@ export function AuthForm({ mode }: AuthFormProps) {
           {isLogin ? 'Sign in to workspace' : 'Create workspace account'}
         </h1>
         <p class="text-slate-400 text-xs">
-          {isLogin ? "Need an account? " : 'Already registered? '}
+          {isLogin ? 'Need an account? ' : 'Already registered? '}
           <a href={isLogin ? '/signup' : '/login'} class="text-emerald-400 font-semibold hover:underline">
             {isLogin ? 'Sign up' : 'Sign in'}
           </a>
@@ -20,16 +20,18 @@ export function AuthForm({ mode }: AuthFormProps) {
       </div>
 
       {isLogin && (
-        <div class="mb-6 p-3 rounded-lg bg-[#06090f] border border-[#1a2333] text-xs text-slate-300 font-mono">
-          <span class="text-emerald-400 font-bold block mb-0.5">Demo Credentials:</span>
-          <span>admin@frootkit.dev &bull; password123</span>
+        <div class="mb-6 p-3.5 rounded-lg bg-[#06090f] border border-[#1a2333] text-xs text-slate-300">
+          <span class="text-emerald-400 font-bold block mb-1">Demo Credentials:</span>
+          <div class="font-mono text-slate-300 text-[11px]">
+            admin@frootkit.dev <span class="text-slate-500 mx-1">•</span> password123
+          </div>
         </div>
       )}
 
       <form action={`/api/auth?action=${mode}`} method="POST" class="space-y-4">
         {!isLogin && (
           <div>
-            <label class="block text-xs font-mono font-medium text-slate-300 mb-1.5" for="name">
+            <label class="block text-xs font-medium text-slate-300 mb-1.5" for="name">
               Full Name
             </label>
             <input
@@ -44,7 +46,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         )}
 
         <div>
-          <label class="block text-xs font-mono font-medium text-slate-300 mb-1.5" for="email">
+          <label class="block text-xs font-medium text-slate-300 mb-1.5" for="email">
             Email Address
           </label>
           <input
@@ -59,7 +61,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         </div>
 
         <div>
-          <label class="block text-xs font-mono font-medium text-slate-300 mb-1.5" for="password">
+          <label class="block text-xs font-medium text-slate-300 mb-1.5" for="password">
             Password
           </label>
           <input
@@ -75,9 +77,10 @@ export function AuthForm({ mode }: AuthFormProps) {
 
         <button
           type="submit"
-          class="w-full py-2.5 rounded-lg bg-emerald-500 text-slate-950 font-semibold text-sm hover:bg-emerald-400 transition-colors mt-2"
+          class="w-full py-2.5 rounded-lg bg-emerald-500 text-slate-950 font-semibold text-sm hover:bg-emerald-400 transition-colors mt-2 flex items-center justify-center gap-2"
         >
-          {isLogin ? 'Sign In &rarr;' : 'Create Account &rarr;'}
+          <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
+          <span>→</span>
         </button>
       </form>
     </div>

@@ -6,11 +6,11 @@ export function PostCard({ post, featured = false }: { post: Post; featured?: bo
       <article class="rounded-xl border border-[#1a2333] bg-[#0a0f18] p-8 hover:border-slate-700 transition-colors mb-10">
         <div class="flex items-center gap-3 mb-4 text-xs font-mono">
           <span class="text-emerald-400 font-semibold px-2.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
-            Featured &bull; {post.category}
+            Featured • {post.category}
           </span>
-          <span class="text-slate-500">&bull;</span>
+          <span class="text-slate-500">•</span>
           <span class="text-slate-400">{post.readTime}</span>
-          <span class="text-slate-500">&bull;</span>
+          <span class="text-slate-500">•</span>
           <span class="text-slate-400">{post.date}</span>
         </div>
 
@@ -41,7 +41,7 @@ export function PostCard({ post, featured = false }: { post: Post; featured?: bo
             href={`/blog/${post.slug}`}
             class="text-emerald-400 text-xs font-semibold hover:text-emerald-300 transition-colors flex items-center gap-1"
           >
-            Read Article &rarr;
+            Read Article →
           </a>
         </div>
       </article>
@@ -86,7 +86,7 @@ export function PostCard({ post, featured = false }: { post: Post; featured?: bo
           href={`/blog/${post.slug}`}
           class="text-emerald-400 text-xs font-semibold hover:text-emerald-300 transition-colors"
         >
-          Read &rarr;
+          Read →
         </a>
       </div>
     </article>

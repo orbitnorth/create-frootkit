@@ -15,7 +15,7 @@ export default function SaaSMarketingPage() {
           {/* Left Column (7 cols) */}
           <div class="lg:col-span-7">
             <div class="text-xs font-mono font-medium text-emerald-400 mb-3 uppercase tracking-wide">
-              Security Architecture &bull; Pure Web Crypto
+              Security Architecture • Pure Web Crypto
             </div>
 
             <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight mb-6">
@@ -29,9 +29,10 @@ export default function SaaSMarketingPage() {
             <div class="flex flex-wrap items-center gap-4 mb-8">
               <a
                 href="/signup"
-                class="px-5 py-2.5 rounded-lg bg-emerald-500 text-slate-950 font-semibold hover:bg-emerald-400 transition-colors text-sm"
+                class="px-5 py-2.5 rounded-lg bg-emerald-500 text-slate-950 font-semibold hover:bg-emerald-400 transition-colors text-sm flex items-center gap-1.5"
               >
-                Create Account &rarr;
+                <span>Create Account</span>
+                <span>→</span>
               </a>
               <a
                 href="/dashboard"
@@ -42,7 +43,7 @@ export default function SaaSMarketingPage() {
             </div>
 
             <div class="text-xs font-mono text-slate-400 flex items-center gap-2">
-              <span class="text-emerald-400 font-bold">&check;</span>
+              <span class="text-emerald-400 font-bold">✓</span>
               <span>Demo Account ready: admin@frootkit.dev / password123</span>
             </div>
           </div>
@@ -52,7 +53,7 @@ export default function SaaSMarketingPage() {
             <div class="rounded-xl border border-[#1a2333] bg-[#0a0f18] p-6 shadow-xl space-y-4">
               <div class="flex items-center justify-between pb-3 border-b border-[#1a2333]">
                 <span class="text-xs font-mono text-slate-400">Security Telemetry</span>
-                <span class="text-[10px] font-mono text-emerald-400 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
+                <span class="text-[10px] font-mono text-emerald-400 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 font-semibold">
                   PBKDF2-SHA256
                 </span>
               </div>
@@ -85,9 +86,9 @@ export default function SaaSMarketingPage() {
         </div>
       </main>
 
-      <footer class="border-t border-[#1a2333] bg-[#06090f] py-8 text-xs text-slate-400 font-mono">
+      <footer class="border-t border-[#1a2333] bg-[#06090f] py-8 text-xs text-slate-400">
         <div class="max-w-6xl mx-auto px-6 flex justify-between">
-          <div>FrootAuth &copy; {new Date().getFullYear()} OrbitNorth LLC</div>
+          <div>FrootAuth © {new Date().getFullYear()} OrbitNorth LLC</div>
           <div class="flex gap-4">
             <a href="/login" class="hover:text-white transition-colors">Sign In</a>
             <a href="/signup" class="hover:text-white transition-colors">Sign Up</a>

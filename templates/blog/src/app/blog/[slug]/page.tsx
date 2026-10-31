@@ -19,7 +19,7 @@ export default function BlogPostPage({ params }: { params?: { slug?: string } })
           href="/"
           class="inline-flex items-center gap-2 text-xs font-mono text-slate-400 hover:text-emerald-400 mb-8 transition-colors"
         >
-          &larr; Back to articles
+          ← Back to articles
         </a>
 
         <header class="mb-10">
@@ -27,9 +27,9 @@ export default function BlogPostPage({ params }: { params?: { slug?: string } })
             <span class="px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
               {post.category}
             </span>
-            <span class="text-slate-500">&bull;</span>
+            <span class="text-slate-500">•</span>
             <span class="text-slate-400">{post.readTime}</span>
-            <span class="text-slate-500">&bull;</span>
+            <span class="text-slate-500">•</span>
             <span class="text-slate-400">{post.date}</span>
           </div>
 

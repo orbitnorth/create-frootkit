@@ -19,7 +19,7 @@ export default function ProductDetailPage({ params }: { params?: { id?: string }
           href="/"
           class="inline-flex items-center gap-2 text-xs font-mono text-slate-400 hover:text-emerald-400 mb-8 transition-colors"
         >
-          &larr; Back to catalog
+          ← Back to catalog
         </a>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
@@ -36,7 +36,7 @@ export default function ProductDetailPage({ params }: { params?: { id?: string }
               <span class="px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
                 {product.category}
               </span>
-              <span class="text-slate-500">&bull;</span>
+              <span class="text-slate-500">•</span>
               <span class="text-slate-300 font-semibold">
                 {product.rating.toFixed(1)} / 5.0 ({product.reviewsCount} reviews)
               </span>
@@ -61,7 +61,7 @@ export default function ProductDetailPage({ params }: { params?: { id?: string }
               <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-slate-300 font-mono">
                 {product.features.map((f) => (
                   <li key={f} class="flex items-center gap-2">
-                    <span class="text-emerald-400 font-bold">&check;</span>
+                    <span class="text-emerald-400 font-bold">✓</span>
                     <span>{f}</span>
                   </li>
                 ))}
@@ -73,7 +73,7 @@ export default function ProductDetailPage({ params }: { params?: { id?: string }
                 href="/cart"
                 class="flex-1 py-3 rounded-lg bg-emerald-500 text-slate-950 font-semibold text-center text-sm hover:bg-emerald-400 transition-colors"
               >
-                Add to Cart &bull; ${product.price.toFixed(2)}
+                Add to Cart • ${product.price.toFixed(2)}
               </a>
               <span class="text-xs text-slate-400 font-mono">
                 {product.inStock ? 'In Stock (Ships in 24h)' : 'Backorder'}

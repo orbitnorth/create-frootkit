@@ -22,8 +22,8 @@ export default function DashboardOverviewPage() {
   return (
     <div class="space-y-8">
       <div>
-        <h2 class="text-2xl font-bold text-white mb-1">Metrics & Telemetry</h2>
-        <p class="text-xs text-slate-400 font-mono">Real-time throughput and workspace subscriber analytics.</p>
+        <h2 class="text-2xl font-bold text-white mb-1.5 tracking-tight">Metrics & Telemetry</h2>
+        <p class="text-sm text-slate-400">Real-time throughput and workspace subscriber analytics.</p>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -38,29 +38,29 @@ export default function DashboardOverviewPage() {
         ))}
       </div>
 
-      <div class="rounded-xl border border-[#1a2333] bg-[#0a0f18] p-6">
-        <h3 class="text-sm font-bold text-white mb-4">Recent Workspace Activity</h3>
+      <div class="rounded-xl border border-[#1a2333] bg-[#0a0f18] p-6 shadow-sm">
+        <h3 class="text-base font-semibold text-white mb-4">Recent Workspace Activity</h3>
         <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs font-mono">
+          <table class="w-full text-left text-sm">
             <thead>
-              <tr class="border-b border-[#1a2333] text-slate-400">
+              <tr class="border-b border-[#1a2333] text-slate-400 text-xs uppercase font-mono tracking-wider">
                 <th class="pb-3 font-semibold">User</th>
                 <th class="pb-3 font-semibold">Email</th>
                 <th class="pb-3 font-semibold">Role</th>
-                <th class="pb-3 font-semibold">Timestamp</th>
+                <th class="pb-3 font-semibold text-right">Timestamp</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-[#1a2333]/70">
               {recentUsers.map((u) => (
                 <tr key={u.email} class="hover:bg-[#0f1624]/40 transition-colors">
-                  <td class="py-3 font-medium text-white">{u.name}</td>
-                  <td class="py-3 text-slate-400">{u.email}</td>
-                  <td class="py-3">
-                    <span class="px-2 py-0.5 rounded bg-[#0f1624] text-slate-300 border border-[#1a2333] text-[10px]">
+                  <td class="py-3.5 font-medium text-white">{u.name}</td>
+                  <td class="py-3.5 text-slate-400 font-mono text-xs">{u.email}</td>
+                  <td class="py-3.5">
+                    <span class="px-2 py-0.5 rounded-md bg-[#0f1624] text-slate-300 border border-[#1a2333] text-xs font-mono">
                       {u.role}
                     </span>
                   </td>
-                  <td class="py-3 text-slate-500">{u.date}</td>
+                  <td class="py-3.5 text-slate-500 text-xs text-right font-mono">{u.date}</td>
                 </tr>
               ))}
             </tbody>
