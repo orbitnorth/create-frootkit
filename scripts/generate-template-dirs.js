@@ -2273,3 +2273,4 @@ export async function POST(req: Request): Promise<Response> {
 `);
 
 console.log('✓ All 5 template directories created successfully on disk!');
+
