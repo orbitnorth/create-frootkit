@@ -1,6 +1,6 @@
 {
   "name": "create-frootkit",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Interactive CLI for scaffolding high-performance FrootKit (Next.js Alternative) applications",
   "type": "module",
   "bin": {

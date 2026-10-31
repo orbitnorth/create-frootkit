@@ -20,7 +20,8 @@ export function generateFrootKitTemplate(projectName: string): TemplateFileMap {
           start: 'frootkit start',
         },
         dependencies: {
-          'froot-kit': '^1.2.2',
+          frootkit: 'npm:froot-kit@^1.2.4',
+          'froot-kit': '^1.2.4',
           frootjs: '^1.0.6',
           preact: '^11.1.0',
           'preact-render-to-string': '^6.8.2',
