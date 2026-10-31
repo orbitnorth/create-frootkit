@@ -15,12 +15,16 @@ describe('⚡ create-frootkit Scaffolder', () => {
     assert.ok(files['src/app/layout.tsx']);
     assert.ok(files['src/app/page.tsx']);
     assert.ok(files['src/app/api/health/route.ts'], 'Must generate health API route');
-    assert.ok(files['src/app/docs/layout.tsx']);
-    assert.ok(files['src/app/docs/page.tsx']);
-    assert.ok(files['src/app/docs/[slug]/page.tsx']);
     assert.ok(files['src/styles.css']);
-    assert.ok(files['content/docs/overview.md']);
-    assert.ok(files['content/docs/quickstart.md']);
+    assert.ok(files['README.md']);
+
+    // Ensure NO unnecessary JSX pragma on line 1
+    assert.ok(!files['src/app/page.tsx']!.includes('@jsxImportSource'), 'page.tsx must not have @jsxImportSource pragma');
+    assert.ok(!files['src/app/layout.tsx']!.includes('@jsxImportSource'), 'layout.tsx must not have @jsxImportSource pragma');
+
+    // Ensure docs and content directories are removed by default
+    assert.equal(files['src/app/docs/page.tsx'], undefined, 'Docs directory must be removed');
+    assert.equal(files['content/docs/overview.md'], undefined, 'Content directory must be removed');
 
     // Check package.json scripts
     const pkg = JSON.parse(files['package.json']!);
@@ -50,7 +54,7 @@ describe('⚡ create-frootkit Scaffolder', () => {
       installDeps: false,
     });
 
-    assert.ok(result.fileCount >= 14);
+    assert.ok(result.fileCount >= 8);
 
     const hasLayout = await fs.stat(path.join(tempDir, 'src/app/layout.tsx'));
     assert.ok(hasLayout.isFile());
