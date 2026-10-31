@@ -94,3 +94,4 @@ export default tseslint.config(
 
   files['package.json'] = JSON.stringify(pkg, null, 2) + '\n';
 }
+

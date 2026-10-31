@@ -100,3 +100,4 @@ export const prisma = new PrismaClient();
 
   files['package.json'] = JSON.stringify(pkg, null, 2) + '\n';
 }
+

@@ -26,7 +26,7 @@ export * from './template.js';
 export * from './scaffold.js';
 export * from './ui.js';
 
-const VERSION = '1.1.0';
+const VERSION = '1.1.1';
 
 interface ParsedArgs {
   targetDir?: string;
@@ -125,14 +125,6 @@ function printUsage(): void {
 `);
 }
 
-function detectCurrentPackageManager(): 'pnpm' | 'npm' | 'yarn' | 'bun' {
-  const ua = process.env['npm_config_user_agent'] || '';
-  if (ua.includes('pnpm')) return 'pnpm';
-  if (ua.includes('bun')) return 'bun';
-  if (ua.includes('yarn')) return 'yarn';
-  return 'npm';
-}
-
 function printAgentSchema(): void {
   const schema = {
     $schema: 'https://json-schema.org/draft/2020-12/schema',
@@ -210,15 +202,13 @@ async function main(): Promise<void> {
 
   printBanner(VERSION);
 
-  const detectedPm = detectCurrentPackageManager();
-
   // 1. Target Directory & Project Name
   let targetDir = args.targetDir;
   if (!targetDir) {
     if (args.yes) {
       targetDir = 'my-frootkit-app';
     } else {
-      printStep(1, 6, 'Project Directory');
+      printStep(1, 7, 'Project Directory');
       targetDir = await promptText('Directory name:', 'my-frootkit-app', (input) => {
         if (!input.trim()) return 'Project name cannot be empty';
         return true;
@@ -245,13 +235,13 @@ async function main(): Promise<void> {
     }
   }
 
-  // 2. Package Manager Selection
+  // 2. Package Manager Selection (do not detect, always ask the user)
   let pkgManager = args.pkgManager;
   if (!pkgManager) {
     if (args.yes) {
-      pkgManager = detectedPm;
+      pkgManager = 'pnpm';
     } else {
-      printStep(2, 6, 'Package Manager');
+      printStep(2, 7, 'Package Manager');
       pkgManager = await promptSelect<'pnpm' | 'npm' | 'yarn' | 'bun'>(
         'Choose your package manager:',
         [
@@ -260,9 +250,7 @@ async function main(): Promise<void> {
           { value: 'bun', label: 'bun', hint: 'All-in-one JavaScript runtime & toolkit' },
           { value: 'yarn', label: 'yarn', hint: 'Classic package manager' },
         ],
-        ['pnpm', 'npm', 'bun', 'yarn'].indexOf(detectedPm) >= 0
-          ? ['pnpm', 'npm', 'bun', 'yarn'].indexOf(detectedPm)
-          : 0
+        0
       );
       console.log();
     }
@@ -274,7 +262,7 @@ async function main(): Promise<void> {
     if (args.yes) {
       db = 'none';
     } else {
-      printStep(3, 6, 'Database / ORM');
+      printStep(3, 7, 'Database / ORM');
       db = await promptSelect<DatabaseOption>(
         'Include a database integration?',
         [
@@ -294,7 +282,7 @@ async function main(): Promise<void> {
     if (args.yes) {
       linter = 'none';
     } else {
-      printStep(4, 6, 'Linter & Formatter');
+      printStep(4, 7, 'Linter & Formatter');
       linter = await promptSelect<LinterOption>(
         'Include code quality and linting tools?',
         [
@@ -308,17 +296,37 @@ async function main(): Promise<void> {
     }
   }
 
-  // 5. AI Rules & Docker
-  let agent = args.agent ?? true;
-  let docker = args.docker ?? false;
+  // 5. AI Coding Guidelines
+  let agent = args.agent;
+  if (agent === undefined) {
+    if (args.yes) {
+      agent = true;
+    } else {
+      printStep(5, 7, 'AI Coding Guidelines');
+      agent = await promptConfirm('Include AI guidelines (AGENT.md & .cursorrules)?', true);
+      console.log();
+    }
+  }
 
-  // 6. Git & Install
+  // 6. Docker Container
+  let docker = args.docker;
+  if (docker === undefined) {
+    if (args.yes) {
+      docker = false;
+    } else {
+      printStep(6, 7, 'Docker Container');
+      docker = await promptConfirm('Include Docker container setup (Dockerfile & compose)?', false);
+      console.log();
+    }
+  }
+
+  // 7. Git & Dependencies
   let gitInit = args.git;
   if (gitInit === undefined) {
     if (args.yes) {
       gitInit = true;
     } else {
-      printStep(5, 6, 'Git Repository');
+      printStep(7, 7, 'Git & Dependencies');
       gitInit = await promptConfirm('Initialize a new Git repository?', true);
       console.log();
     }
@@ -329,8 +337,7 @@ async function main(): Promise<void> {
     if (args.yes) {
       installDeps = false;
     } else {
-      printStep(6, 6, 'Dependencies');
-      installDeps = await promptConfirm(`Install dependencies with ${pkgManager}?`, true);
+      installDeps = await promptConfirm(`Install dependencies now with ${pkgManager}?`, true);
       console.log();
     }
   }

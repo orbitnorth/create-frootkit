@@ -256,3 +256,4 @@ export function printNextSteps(
     ${c.dim}${(pkgManager === 'npm' ? 'npm run start' : `${pkgManager} start`).padEnd(20)}${c.reset} Serves production build with dynamic API routes
 `);
 }
+

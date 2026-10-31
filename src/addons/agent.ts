@@ -55,3 +55,4 @@ Always include the Preact JSX directive at the top of \`.tsx\` files:
 - Build output is in \`.froot/\` — never commit \`.froot/\`
 `;
 }
+

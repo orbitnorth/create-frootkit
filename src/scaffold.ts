@@ -71,7 +71,9 @@ export async function scaffoldProject(options: ScaffoldOptions): Promise<{ fileC
 
   if (installDeps) {
     try {
-      await execAsync(`${pkgManager} install`, { cwd: targetDir });
+      const isWin = process.platform === 'win32';
+      const cmd = isWin && pkgManager !== 'bun' ? `${pkgManager}.cmd` : pkgManager;
+      await execAsync(`${cmd} install`, { cwd: targetDir });
     } catch {
       // ignore install errors
     }
