@@ -1,44 +1,42 @@
 export function Navbar() {
   return (
-    <header class="border-b border-white/[0.08] bg-[#090a0f]/80 backdrop-blur-md sticky top-0 z-50">
-      <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-        <a href="/" class="flex items-center gap-2.5 font-semibold text-zinc-100 text-sm tracking-tight group">
-          <div class="w-7 h-7 rounded-md bg-white/[0.06] border border-white/[0.1] flex items-center justify-center text-zinc-200 group-hover:border-white/[0.2] transition-colors shrink-0">
-            <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <path d="M16 10a4 4 0 0 1-8 0" />
-            </svg>
-          </div>
-          <span>Froot<span class="text-zinc-400 font-normal">Store</span></span>
-        </a>
+    <>
+      {/* Top Banner */}
+      <div class="bg-[#0a2540] py-2 text-center text-[13px] text-white">
+        Free shipping on orders over $75 · 30-day returns
+      </div>
 
-        <nav class="flex items-center gap-5 text-xs font-medium">
-          <a href="/#catalog" class="text-zinc-400 hover:text-zinc-200 transition-colors">
-            Catalog
+      {/* Main Sticky Navbar */}
+      <header class="sticky top-0 z-30 border-b border-[#e6ebf1] bg-white/90 backdrop-blur">
+        <div class="mx-auto max-w-6xl px-6 flex items-center gap-4 py-3">
+          <a href="/" class="text-[22px] font-semibold tracking-tight text-[#635bff]">
+            parcel
           </a>
-          <a
-            href="/api/products"
-            class="text-zinc-400 hover:text-zinc-200 font-mono text-[11px] px-2 py-0.5 rounded bg-white/[0.03] border border-white/[0.06] transition-colors"
-          >
-            /api/products
-          </a>
-          <a
-            href="/cart"
-            class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.05] border border-white/[0.08] text-zinc-200 hover:text-white hover:bg-white/[0.08] transition-all text-xs font-medium"
-          >
-            <svg style="width: 13px; height: 13px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <path d="M16 10a4 4 0 0 1-8 0" />
+
+          <nav class="ml-4 hidden gap-6 text-[14px] font-medium md:flex">
+            <a href="/#shop" class="text-[#0a2540] hover:text-[#635bff] transition-colors">Shop</a>
+            <a href="/#shop" class="text-[#425466] hover:text-[#635bff] transition-colors">Home</a>
+            <a href="/#shop" class="text-[#425466] hover:text-[#635bff] transition-colors">Office</a>
+            <a href="/#shop" class="text-[#425466] hover:text-[#635bff] transition-colors">Tech</a>
+          </nav>
+
+          <div class="relative ml-auto hidden w-64 sm:block">
+            <svg class="absolute left-3 top-2.5 h-4 w-4 text-[#425466]/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="7" />
+              <path d="m20 20-3-3" />
+            </svg>
+            <input class="inp pl-9" placeholder="Search products" aria-label="Search products" />
+          </div>
+
+          <a href="/cart" class="btn btn-s relative ml-auto sm:ml-0" aria-label="Open cart">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 7h14l-1.5 11h-11zM9 7a3 3 0 0 1 6 0" stroke-linejoin="round" />
             </svg>
             <span>Cart</span>
-            <span class="px-1.5 py-0.2 rounded-full bg-white text-zinc-950 font-bold text-[10px] tabular-nums">
-              2
-            </span>
+            <span class="bd bg-[#635bff] text-white">2</span>
           </a>
-        </nav>
-      </div>
-    </header>
+        </div>
+      </header>
+    </>
   );
 }

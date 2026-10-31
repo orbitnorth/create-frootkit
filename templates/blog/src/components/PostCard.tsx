@@ -3,94 +3,61 @@ import type { Post } from '../data/posts.js';
 export function PostCard({ post, featured = false }: { post: Post; featured?: boolean }) {
   if (featured) {
     return (
-      <article class="rounded-xl border border-white/[0.08] bg-[#0f1117] p-7 sm:p-8 hover:border-white/[0.18] transition-all duration-200 mb-10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] group">
-        <div class="flex flex-wrap items-center gap-2.5 mb-4 text-xs">
-          <span class="text-indigo-400 font-medium px-2.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[11px]">
-            Featured • {post.category}
-          </span>
-          <span class="text-zinc-600">•</span>
-          <span class="text-zinc-400">{post.readTime}</span>
-          <span class="text-zinc-600">•</span>
-          <span class="text-zinc-400">{post.date}</span>
-        </div>
-
-        <h2 class="text-2xl sm:text-3xl font-semibold text-white mb-3 tracking-[-0.02em] leading-snug group-hover:text-indigo-300 transition-colors">
-          <a href={`/blog/${post.slug}`}>
-            {post.title}
-          </a>
-        </h2>
-
-        <p class="text-zinc-400 text-sm sm:text-base leading-relaxed mb-6 max-w-3xl">
-          {post.summary}
-        </p>
-
-        <div class="pt-6 border-t border-white/[0.06] flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <img
-              src={post.author.avatar}
-              alt={post.author.name}
-              class="w-8 h-8 rounded-full object-cover border border-white/[0.1]"
-            />
-            <div class="text-xs">
-              <span class="font-medium text-zinc-200 block">{post.author.name}</span>
-              <span class="text-zinc-500">{post.author.role}</span>
-            </div>
-          </div>
-
-          <a
-            href={`/blog/${post.slug}`}
-            class="text-zinc-200 text-xs font-medium group-hover:text-white transition-colors flex items-center gap-1.5"
+      <a
+        href={`/blog/${post.slug}`}
+        class="group grid overflow-hidden rounded-lg bg-white shadow-[0_13px_27px_-5px_rgba(50,50,93,0.25),0_8px_16px_-8px_rgba(0,0,0,0.3)] border border-[#e6ebf1] md:grid-cols-2 mb-10 transition hover:-translate-y-0.5"
+      >
+        <div class="p-3">
+          <div
+            class="h-full min-h-[220px] overflow-hidden rounded-lg p-6 flex flex-col justify-end text-white"
+            style="background: linear-gradient(145deg, #635bff, #00d4ff)"
           >
-            <span>Read Article</span>
-            <span class="text-zinc-500 group-hover:translate-x-0.5 transition-transform">→</span>
-          </a>
+            <span class="bd w-fit bg-white/20 text-white text-[12px] mb-2">{post.category}</span>
+            <span class="font-mono text-xs opacity-80">{post.readTime} · {post.date}</span>
+          </div>
         </div>
-      </article>
+
+        <div class="flex flex-col justify-center p-6 md:p-10">
+          <span class="bd w-fit bg-[#635bff]/10 text-[#635bff]">Featured · {post.category}</span>
+          <h2 class="mt-3 text-[28px] font-light leading-9 tracking-tight text-[#0a2540] group-hover:text-[#635bff] transition-colors">
+            {post.title}
+          </h2>
+          <p class="mt-2 text-[16px] text-[#425466] leading-relaxed">
+            {post.summary}
+          </p>
+          <div class="mt-5 flex items-center gap-3 text-[13px] text-[#425466]">
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full font-medium text-white bg-[#635bff] text-[12px]">
+              {post.author.name.split(' ').map((n) => n[0]).join('')}
+            </span>
+            <span>{post.author.name} · {post.date} · {post.readTime}</span>
+          </div>
+        </div>
+      </a>
     );
   }
 
   return (
-    <article class="rounded-xl border border-white/[0.08] bg-[#0f1117] p-5 sm:p-6 hover:border-white/[0.18] transition-all duration-200 flex flex-col justify-between shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] group">
-      <div>
-        <div class="flex items-center justify-between mb-3 text-xs">
-          <span class="text-zinc-300 font-medium px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.06] text-[10px]">
-            {post.category}
-          </span>
-          <span class="text-zinc-500 text-[11px]">{post.readTime}</span>
-        </div>
+    <a href={`/blog/${post.slug}`} class="group block">
+      <div
+        class="aspect-[16/10] overflow-hidden rounded-lg p-5 flex flex-col justify-end text-white shadow-[0_2px_5px_-1px_rgba(50,50,93,0.25),0_1px_3px_-1px_rgba(0,0,0,0.3)]"
+        style="background: linear-gradient(145deg, #0a2540, #635bff)"
+      >
+        <span class="font-mono text-xs opacity-75">{post.readTime}</span>
+      </div>
 
-        <h3 class="text-base font-semibold text-zinc-100 mb-2.5 group-hover:text-white transition-colors line-clamp-2 leading-snug">
-          <a href={`/blog/${post.slug}`}>
-            {post.title}
-          </a>
+      <div class="mt-4">
+        <span class="bd bg-[#f6f9fc] text-[#425466] border border-[#e6ebf1] text-xs">{post.category}</span>
+        <h3 class="mt-2 text-[19px] font-medium leading-7 text-[#0a2540] group-hover:text-[#635bff] transition-colors">
+          {post.title}
         </h3>
-
-        <p class="text-zinc-400 text-xs leading-relaxed mb-6 line-clamp-3">
-          {post.summary}
-        </p>
-      </div>
-
-      <div class="pt-4 border-t border-white/[0.06] flex items-center justify-between">
-        <div class="flex items-center gap-2.5">
-          <img
-            src={post.author.avatar}
-            alt={post.author.name}
-            class="w-6 h-6 rounded-full object-cover border border-white/[0.1]"
-          />
-          <div class="text-[11px]">
-            <span class="font-medium text-zinc-300 block">{post.author.name}</span>
-            <span class="text-zinc-500">{post.date}</span>
-          </div>
+        <p class="mt-1 text-[14px] text-[#425466] line-clamp-2">{post.summary}</p>
+        <div class="mt-3 flex items-center gap-2 text-[13px] text-[#425466]">
+          <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full font-medium text-white bg-[#0a2540] text-[11px]">
+            {post.author.name.split(' ').map((n) => n[0]).join('')}
+          </span>
+          <span>{post.author.name} · {post.date}</span>
         </div>
-
-        <a
-          href={`/blog/${post.slug}`}
-          class="text-xs font-medium text-zinc-400 group-hover:text-white transition-colors flex items-center gap-1"
-        >
-          <span>Read</span>
-          <span class="text-zinc-600">→</span>
-        </a>
       </div>
-    </article>
+    </a>
   );
 }

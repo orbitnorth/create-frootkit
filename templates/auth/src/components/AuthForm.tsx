@@ -6,31 +6,28 @@ export function AuthForm({ mode }: AuthFormProps) {
   const isLogin = mode === 'login';
 
   return (
-    <div class="rounded-xl border border-white/[0.08] bg-[#0f1117] p-7 sm:p-8 shadow-2xl shadow-black/50 relative overflow-hidden">
-      {/* Top ambient highlight */}
-      <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent" />
-
+    <div class="rounded-lg border border-[#e6ebf1] bg-white p-7 sm:p-8 shadow-[0_13px_27px_-5px_rgba(50,50,93,0.25),0_8px_16px_-8px_rgba(0,0,0,0.3)]">
       <div class="mb-6">
-        <h1 class="text-xl font-semibold text-white tracking-tight mb-1">
-          {isLogin ? 'Sign in to workspace' : 'Create your account'}
+        <h1 class="text-2xl font-light text-[#0a2540] tracking-tight mb-1">
+          {isLogin ? 'Sign in to FrootAuth' : 'Create your account'}
         </h1>
-        <p class="text-zinc-400 text-xs">
+        <p class="text-sm text-[#425466]">
           {isLogin ? 'Need an account? ' : 'Already registered? '}
-          <a href={isLogin ? '/signup' : '/login'} class="text-indigo-400 font-medium hover:text-indigo-300 transition-colors">
+          <a href={isLogin ? '/signup' : '/login'} class="text-[#635bff] font-medium hover:underline">
             {isLogin ? 'Sign up' : 'Sign in'}
           </a>
         </p>
       </div>
 
       {isLogin && (
-        <div class="mb-5 p-3 rounded-lg bg-white/[0.02] border border-white/[0.06] text-xs">
-          <div class="flex items-center gap-1.5 text-zinc-400 text-[11px] mb-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span class="font-medium text-zinc-300">Quick Demo Credentials:</span>
+        <div class="mb-5 p-3 rounded-md bg-[#f6f9fc] border border-[#e6ebf1] text-xs">
+          <div class="flex items-center gap-1.5 text-[#425466] text-[12px] mb-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#24b47e]" />
+            <span class="font-medium text-[#0a2540]">Demo Credentials:</span>
           </div>
-          <div class="font-mono text-zinc-300 text-[11px] bg-white/[0.03] px-2 py-1 rounded flex items-center justify-between">
+          <div class="font-mono text-[#0a2540] text-[12px] bg-white px-2.5 py-1 rounded border border-[#e6ebf1] flex items-center justify-between">
             <span>admin@frootkit.dev</span>
-            <span class="text-zinc-600">•</span>
+            <span class="text-[#425466]">/</span>
             <span>password123</span>
           </div>
         </div>
@@ -39,46 +36,39 @@ export function AuthForm({ mode }: AuthFormProps) {
       <form action={`/api/auth?action=${mode}`} method="POST" class="space-y-4">
         {!isLogin && (
           <div>
-            <label class="block text-xs font-medium text-zinc-300 mb-1.5" for="name">
+            <label class="block text-xs font-medium text-[#0a2540] mb-1.5" for="name">
               Full Name
             </label>
             <input
               id="name"
               type="text"
               name="name"
-              placeholder="Developer Name"
+              placeholder="Jane Doe"
               required
-              class="w-full px-3 py-2 rounded-lg bg-[#08090a] border border-white/[0.08] text-white text-xs placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+              class="inp"
             />
           </div>
         )}
 
         <div>
-          <label class="block text-xs font-medium text-zinc-300 mb-1.5" for="email">
+          <label class="block text-xs font-medium text-[#0a2540] mb-1.5" for="email">
             Email Address
           </label>
           <input
             id="email"
             type="email"
             name="email"
-            placeholder="admin@frootkit.dev"
+            placeholder="you@company.com"
             defaultValue={isLogin ? 'admin@frootkit.dev' : ''}
             required
-            class="w-full px-3 py-2 rounded-lg bg-[#08090a] border border-white/[0.08] text-white text-xs placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+            class="inp"
           />
         </div>
 
         <div>
-          <div class="flex items-center justify-between mb-1.5">
-            <label class="block text-xs font-medium text-zinc-300" for="password">
-              Password
-            </label>
-            {isLogin && (
-              <span class="text-[11px] text-zinc-500">
-                min 8 characters
-              </span>
-            )}
-          </div>
+          <label class="block text-xs font-medium text-[#0a2540] mb-1.5" for="password">
+            Password
+          </label>
           <input
             id="password"
             type="password"
@@ -86,18 +76,21 @@ export function AuthForm({ mode }: AuthFormProps) {
             placeholder="••••••••••••"
             defaultValue={isLogin ? 'password123' : ''}
             required
-            class="w-full px-3 py-2 rounded-lg bg-[#08090a] border border-white/[0.08] text-white text-xs placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+            class="inp"
           />
         </div>
 
         <button
           type="submit"
-          class="w-full py-2.5 rounded-lg bg-white text-zinc-950 font-medium text-xs hover:bg-zinc-200 transition-all mt-3 flex items-center justify-center gap-2 group shadow-sm"
+          class="btn btn-p w-full py-2.5 text-sm font-medium mt-2"
         >
-          <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
-          <span class="text-zinc-500 group-hover:translate-x-0.5 transition-transform">→</span>
+          {isLogin ? 'Sign In' : 'Create Account'}
         </button>
       </form>
+
+      <div class="mt-6 pt-4 border-t border-[#e6ebf1] text-center text-xs text-[#425466]">
+        Protected by Web Crypto PBKDF2 with 100,000 iterations.
+      </div>
     </div>
   );
 }

@@ -1,34 +1,29 @@
 export function Navbar() {
   return (
-    <header class="border-b border-white/[0.08] bg-[#08090a]/80 backdrop-blur-md sticky top-0 z-50">
-      <div class="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
-        <a href="/" class="flex items-center gap-2.5 font-semibold text-zinc-100 text-sm tracking-tight group">
-          <div class="w-6 h-6 rounded-md bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400 group-hover:border-indigo-400/50 transition-colors shrink-0">
-            <svg style="width: 13px; height: 13px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-            </svg>
-          </div>
-          <span>Froot<span class="text-indigo-400">Journal</span></span>
+    <header class="sticky top-0 z-40 border-b border-[#e6ebf1] bg-white/90 backdrop-blur">
+      <div class="mx-auto max-w-6xl px-6 flex items-center gap-6 py-3">
+        <a href="/" class="text-[22px] font-semibold tracking-tight text-[#635bff]">
+          dispatch
         </a>
 
-        <nav class="flex items-center gap-5 text-xs font-medium">
-          <a href="/" class="text-zinc-400 hover:text-zinc-200 transition-colors">
-            Articles
-          </a>
-          <a
-            href="/api/posts"
-            class="text-zinc-400 hover:text-zinc-200 font-mono text-[11px] px-2 py-0.5 rounded bg-white/[0.03] border border-white/[0.06] transition-colors"
-          >
-            /api/posts
-          </a>
-          <a
-            href="#newsletter"
-            class="px-3 py-1.5 rounded-md bg-white text-zinc-950 font-medium hover:bg-zinc-200 transition-all text-xs shadow-sm"
-          >
-            Subscribe
-          </a>
+        <nav class="hidden gap-6 text-[14px] font-medium md:flex">
+          <a href="/#articles" class="text-[#425466] hover:text-[#635bff] transition-colors">Engineering</a>
+          <a href="/#articles" class="text-[#425466] hover:text-[#635bff] transition-colors">Product</a>
+          <a href="/#articles" class="text-[#425466] hover:text-[#635bff] transition-colors">Finance</a>
+          <a href="/#articles" class="text-[#425466] hover:text-[#635bff] transition-colors">Company</a>
         </nav>
+
+        <div class="relative ml-auto w-44 sm:w-64">
+          <svg class="absolute left-3 top-2.5 h-4 w-4 text-[#425466]/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m20 20-3-3" />
+          </svg>
+          <input class="inp pl-9 py-1.5 text-xs" placeholder="Search articles" aria-label="Search articles" />
+        </div>
+
+        <a href="#subscribe" class="btn btn-p hidden rounded-full sm:inline-flex text-xs py-1.5 px-4">
+          Subscribe
+        </a>
       </div>
     </header>
   );

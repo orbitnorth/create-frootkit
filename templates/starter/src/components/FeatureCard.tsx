@@ -1,29 +1,23 @@
 import type { ComponentChildren } from 'preact';
 
 export interface FeatureCardProps {
-  badge: string;
   title: string;
   description: string;
-  children?: ComponentChildren;
+  icon?: ComponentChildren;
+  badge?: string;
 }
 
-export function FeatureCard({ badge, title, description, children }: FeatureCardProps) {
+export function FeatureCard({ title, description, icon, badge }: FeatureCardProps) {
   return (
-    <div class="rounded-xl border border-white/[0.08] bg-[#0f1117] p-5 hover:border-white/[0.18] transition-all shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
+    <div class="rounded-lg border border-[#e6ebf1] bg-white p-6 shadow-[0_2px_5px_-1px_rgba(50,50,93,0.25),0_1px_3px_-1px_rgba(0,0,0,0.3)] transition hover:-translate-y-0.5 hover:shadow-[0_13px_27px_-5px_rgba(50,50,93,0.25),0_8px_16px_-8px_rgba(0,0,0,0.3)]">
       <div class="flex items-center justify-between mb-4">
-        <div class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/25 flex items-center justify-center text-indigo-400">
-          {children}
-        </div>
-        <span class="text-[11px] font-medium px-2 py-0.5 rounded-full bg-white/[0.04] text-zinc-300 border border-white/[0.06]">
-          {badge}
+        <span class="grid h-10 w-10 place-items-center rounded-md bg-[#635bff]/10 text-[#635bff]">
+          {icon}
         </span>
+        {badge && <span class="bd bg-[#635bff]/10 text-[#635bff]">{badge}</span>}
       </div>
-      <h3 class="text-sm font-semibold text-white mb-1.5">
-        {title}
-      </h3>
-      <p class="text-zinc-400 text-xs leading-relaxed">
-        {description}
-      </p>
+      <h3 class="text-[17px] font-medium text-[#0a2540]">{title}</h3>
+      <p class="mt-1 text-[14px] text-[#425466] leading-relaxed">{description}</p>
     </div>
   );
 }

@@ -9,13 +9,13 @@ export interface RootLayoutProps {
 }
 
 export default function RootLayout({ children, metadata }: RootLayoutProps) {
-  const title = metadata?.title || 'FrootStore — High-Performance Gear';
+  const title = metadata?.title || 'Parcel — Everyday objects, well made';
   const description =
     metadata?.description ||
-    'Minimalist hardware, peripherals, and engineering workspace equipment powered by Preact and FrootKit.';
+    'Small-batch goods for your desk, kitchen, and commute. Built with FrootKit.';
 
   return (
-    <html lang="en" class="dark scroll-smooth">
+    <html lang="en" class="scroll-smooth">
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,12 +24,12 @@ export default function RootLayout({ children, metadata }: RootLayoutProps) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
           rel="stylesheet"
         />
         <link rel="stylesheet" href="/styles.css" />
       </head>
-      <body class="bg-[#090a0f] text-zinc-100 min-h-screen antialiased selection:bg-white/20 selection:text-white font-sans">
+      <body class="bg-white font-sans text-[#425466] antialiased">
         {children}
       </body>
     </html>

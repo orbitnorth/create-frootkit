@@ -4,29 +4,46 @@
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  --color-brand-primary: #6366f1;
-  --color-brand-hover: #4f46e5;
+  --color-brand: #635bff;
+  --color-brand-hover: #5249e6;
+  --color-navy: #0a2540;
+  --color-slate: #425466;
+  --color-surface: #f6f9fc;
+  --color-hairline: #e6ebf1;
+  --color-cyan: #00d4ff;
+  --color-success: #24b47e;
+  --color-error: #cd3d64;
+  --color-warn: #c98a00;
 }
 
 :root {
-  color-scheme: dark;
-  --bg-canvas: #08090a;
-  --bg-surface: #0f1117;
-  --bg-elevated: #151822;
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.16);
-  --text-primary: #f4f4f5;
-  --text-secondary: #9496a1;
-  --text-muted: #5c6370;
+  color-scheme: light;
+  --brand: #635bff;
+  --navy: #0a2540;
+  --slate: #425466;
+  --surface: #f6f9fc;
+  --hairline: #e6ebf1;
+  --cyan: #00d4ff;
+  --success: #24b47e;
+  --error: #cd3d64;
+  --warn: #c98a00;
+
+  --shadow-card: 0 2px 5px -1px rgba(50, 50, 93, 0.25), 0 1px 3px -1px rgba(0, 0, 0, 0.3);
+  --shadow-pop: 0 13px 27px -5px rgba(50, 50, 93, 0.25), 0 8px 16px -8px rgba(0, 0, 0, 0.3);
 }
 
-html {
-  background-color: var(--bg-canvas);
-  color: var(--text-primary);
-  font-family: var(--font-sans);
-  scroll-behavior: smooth;
+body {
+  font-size: 15px;
+  line-height: 24px;
+  background-color: #ffffff;
+  color: #425466;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+:focus-visible {
+  outline: 2px solid #635bff;
+  outline-offset: 2px;
 }
 
 /* Strict SVG safety to prevent flex ballooning */
@@ -35,17 +52,130 @@ svg {
   max-width: 100%;
 }
 
-/* Linear-style subtle card highlight */
-.linear-card {
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
-  border-radius: 0.75rem;
-  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+/* Stripe Design Tokens & Utility Classes */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding: 0.625rem 1.25rem;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 150ms cubic-bezier(0.215, 0.61, 0.355, 1);
+  cursor: pointer;
 }
 
-.linear-card:hover {
-  border-color: var(--border-strong);
+.btn-p {
+  background-color: #635bff;
+  color: #ffffff;
+  box-shadow: var(--shadow-card);
+}
+.btn-p:hover {
+  background-color: #5249e6;
+}
+
+.btn-w {
+  background-color: #ffffff;
+  color: #635bff;
+  box-shadow: var(--shadow-card);
+}
+.btn-w:hover {
+  background-color: #f6f9fc;
+}
+
+.btn-o {
+  border: 1px solid #e6ebf1;
+  background-color: #ffffff;
+  color: #0a2540;
+  box-shadow: var(--shadow-card);
+}
+.btn-o:hover {
+  background-color: #f6f9fc;
+}
+
+.btn-gl {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+}
+.btn-gl:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn-s {
+  border: 1px solid #e6ebf1;
+  background-color: #ffffff;
+  color: #0a2540;
+  box-shadow: var(--shadow-card);
+}
+.btn-s:hover {
+  background-color: #f6f9fc;
+}
+
+.btn-n {
+  background-color: #0a2540;
+  color: #ffffff;
+  box-shadow: var(--shadow-card);
+}
+.btn-n:hover {
+  background-color: #425466;
+}
+
+.bd {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  padding: 0.125rem 0.625rem;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.inp {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #e6ebf1;
+  background-color: #ffffff;
+  padding: 0.5rem 0.75rem;
+  font-size: 15px;
+  color: #0a2540;
+  outline: none;
+  transition: all 150ms cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+.inp:focus {
+  border-color: #635bff;
+  box-shadow: 0 0 0 3px rgba(99, 91, 255, 0.25);
+}
+
+.card {
+  border-radius: 8px;
+  border: 1px solid #e6ebf1;
+  background-color: #ffffff;
+  padding: 1.25rem;
+  box-shadow: var(--shadow-card);
+}
+
+.shadow-card {
+  box-shadow: var(--shadow-card);
+}
+
+.shadow-pop {
+  box-shadow: var(--shadow-pop);
+}
+
+.hero {
+  background: linear-gradient(160deg, #635bff 0%, #7a73ff 38%, #00d4ff 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+.rise {
+  animation: rise 0.6s cubic-bezier(0.215, 0.61, 0.355, 1) both;
 }
 
 /* Accessibility: Mandatory Reduced Motion */
