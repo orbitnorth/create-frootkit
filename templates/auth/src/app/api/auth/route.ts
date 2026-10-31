@@ -15,6 +15,24 @@ import {
 } from '@/lib/auth.js';
 
 export async function GET(req: Request): Promise<Response> {
+  const url = new URL(req.url);
+  const action = url.searchParams.get('action');
+
+  if (action === 'logout') {
+    const cookies = parseCookies(req.headers.get('cookie'));
+    const token = cookies['froot_session'];
+    if (token) {
+      await deleteSession(token);
+    }
+    return new Response(null, {
+      status: 302,
+      headers: {
+        'Set-Cookie': clearSessionCookie(),
+        Location: '/login',
+      },
+    });
+  }
+
   const cookies = parseCookies(req.headers.get('cookie'));
   const sessionToken = cookies['froot_session'];
 

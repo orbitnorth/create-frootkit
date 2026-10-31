@@ -33,7 +33,12 @@ export function AuthForm({ mode }: AuthFormProps) {
         </div>
       )}
 
-      <form action={`/api/auth?action=${mode}`} method="POST" class="space-y-4">
+      <form
+        action={`/api/auth?action=${mode}`}
+        method="POST"
+        onsubmit="try{localStorage.setItem('froot_auth_user',JSON.stringify({email:this.email.value,name:this.name?this.name.value:''}))}catch(e){}"
+        class="space-y-4"
+      >
         {!isLogin && (
           <div>
             <label class="block text-xs font-medium text-[#0a2540] mb-1.5" for="name">

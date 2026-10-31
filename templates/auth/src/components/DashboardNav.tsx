@@ -85,21 +85,77 @@ export function DashboardNav() {
       <div class="pt-3 border-t border-[#e6ebf1]">
         <div class="flex items-center justify-between p-2 rounded-lg bg-[#f6f9fc] text-xs">
           <div class="flex items-center gap-2 min-w-0">
-            <div class="w-7 h-7 rounded-full bg-[#635bff] text-white flex items-center justify-center text-xs font-semibold shrink-0">
-              AD
+            <div
+              id="user-avatar"
+              class="w-7 h-7 rounded-full bg-[#635bff] text-white flex items-center justify-center text-xs font-semibold shrink-0"
+            >
+              U
             </div>
             <div class="truncate">
-              <div class="font-medium text-[#0a2540] truncate">admin@frootkit.dev</div>
-              <div class="text-[10px] text-[#425466]">Administrator</div>
+              <div id="user-email" class="font-medium text-[#0a2540] truncate" title="user">
+                Loading...
+              </div>
+              <div id="user-role" class="text-[10px] text-[#425466]">
+                Member
+              </div>
             </div>
           </div>
-          <a href="/login" class="text-[#425466] hover:text-[#cd3d64] p-1" title="Sign out">
+          <a
+            href="/api/auth?action=logout"
+            onclick="try{localStorage.removeItem('froot_auth_user')}catch(e){}"
+            class="text-[#425466] hover:text-[#cd3d64] p-1 transition-colors"
+            title="Sign out"
+          >
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
           </a>
         </div>
       </div>
+
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            (function() {
+              function updateUI(user) {
+                if (!user || !user.email) return;
+                var email = user.email;
+                var name = user.name || email.split('@')[0];
+                var initials = (name.slice(0, 2) || email.slice(0, 2)).toUpperCase();
+                var role = user.role === 'admin' ? 'Administrator' : (user.role ? (user.role.charAt(0).toUpperCase() + user.role.slice(1)) : 'Member');
+                
+                var avatarEl = document.getElementById('user-avatar');
+                var emailEl = document.getElementById('user-email');
+                var roleEl = document.getElementById('user-role');
+                
+                if (avatarEl) avatarEl.textContent = initials;
+                if (emailEl) {
+                  emailEl.textContent = email;
+                  emailEl.title = email;
+                }
+                if (roleEl) roleEl.textContent = role;
+              }
+
+              try {
+                var cached = localStorage.getItem('froot_auth_user');
+                if (cached) {
+                  updateUI(JSON.parse(cached));
+                }
+              } catch(e) {}
+
+              fetch('/api/auth')
+                .then(function(res) { return res.ok ? res.json() : null; })
+                .then(function(data) {
+                  if (data && data.authenticated && data.user) {
+                    try { localStorage.setItem('froot_auth_user', JSON.stringify(data.user)); } catch(e) {}
+                    updateUI(data.user);
+                  }
+                })
+                .catch(function() {});
+            })();
+          `,
+        }}
+      />
     </aside>
   );
 }
