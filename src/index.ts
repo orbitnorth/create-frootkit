@@ -26,7 +26,7 @@ export * from './template.js';
 export * from './scaffold.js';
 export * from './ui.js';
 
-const VERSION = '1.1.3';
+const VERSION = '1.1.4';
 
 interface ParsedArgs {
   targetDir?: string;
