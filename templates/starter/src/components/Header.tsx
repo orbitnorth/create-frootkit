@@ -1,13 +1,13 @@
 export function Header() {
   return (
-    <header class="border-b border-slate-800/80 bg-slate-950/40 backdrop-blur-md sticky top-0 z-50">
+    <header class="border-b border-[#1a2333] bg-[#06090f]/95 sticky top-0 z-50">
       <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <span class="text-emerald-400 font-extrabold text-xl tracking-tight flex items-center gap-2">
-            <span class="inline-block w-3 h-3 rounded-full bg-emerald-400 animate-pulse" />
+          <span class="text-white font-extrabold text-lg tracking-tight flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block" />
             FrootKit
           </span>
-          <span class="px-2 py-0.5 text-[11px] font-mono font-medium rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="px-2 py-0.5 text-[11px] font-mono text-slate-400 rounded-md bg-[#0a0f18] border border-[#1a2333]">
             v1.3.1
           </span>
         </div>
@@ -23,7 +23,7 @@ export function Header() {
           </a>
           <a
             href="/api/health"
-            class="text-slate-300 hover:text-emerald-400 transition-colors font-mono text-xs px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800"
+            class="text-emerald-400 hover:text-emerald-300 font-mono text-xs px-2.5 py-1 rounded-md bg-[#0a0f18] border border-[#1a2333] transition-colors"
           >
             /api/health
           </a>

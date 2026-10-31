@@ -1,20 +1,24 @@
+import type { ComponentChildren } from 'preact';
+
 export interface FeatureCardProps {
-  icon: string;
   badge: string;
   title: string;
   description: string;
+  children?: ComponentChildren;
 }
 
-export function FeatureCard({ icon, badge, title, description }: FeatureCardProps) {
+export function FeatureCard({ badge, title, description, children }: FeatureCardProps) {
   return (
-    <div class="rounded-2xl border border-slate-800/80 bg-slate-900/30 p-6 backdrop-blur-sm hover:border-emerald-500/40 transition-all hover:-translate-y-1 group">
+    <div class="rounded-xl border border-[#1a2333] bg-[#0a0f18] p-6 hover:border-slate-700 transition-colors">
       <div class="flex items-center justify-between mb-4">
-        <span class="text-3xl">{icon}</span>
-        <span class="text-xs font-mono font-medium px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700/60 group-hover:border-emerald-500/40 transition-colors">
+        <div class="w-9 h-9 rounded-lg bg-[#0f1624] border border-[#1a2333] flex items-center justify-center text-emerald-400">
+          {children}
+        </div>
+        <span class="text-xs font-mono font-medium px-2 py-0.5 rounded bg-[#0f1624] text-slate-300 border border-[#1a2333]">
           {badge}
         </span>
       </div>
-      <h3 class="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">
+      <h3 class="text-base font-bold text-white mb-2">
         {title}
       </h3>
       <p class="text-slate-400 text-sm leading-relaxed">

@@ -11,19 +11,19 @@ export default function ProductDetailPage({ params }: { params?: { id?: string }
   const product = PRODUCTS.find((p) => p.id === id) || PRODUCTS[0]!;
 
   return (
-    <div class="min-h-screen flex flex-col justify-between">
+    <div class="min-h-screen bg-[#06090f] text-slate-100 flex flex-col justify-between">
       <Navbar />
 
       <main class="max-w-6xl mx-auto px-6 py-12 flex-1 w-full">
         <a
           href="/"
-          class="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-emerald-400 mb-8 transition-colors"
+          class="inline-flex items-center gap-2 text-xs font-mono text-slate-400 hover:text-emerald-400 mb-8 transition-colors"
         >
           &larr; Back to catalog
         </a>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          <div class="rounded-3xl border border-slate-800 overflow-hidden bg-slate-950 aspect-[4/3]">
+          <div class="rounded-xl border border-[#1a2333] overflow-hidden bg-[#0a0f18] aspect-[4/3]">
             <img
               src={product.image}
               alt={product.name}
@@ -32,20 +32,21 @@ export default function ProductDetailPage({ params }: { params?: { id?: string }
           </div>
 
           <div>
-            <div class="flex items-center gap-2 mb-3">
-              <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-mono font-medium">
+            <div class="flex items-center gap-3 mb-3 text-xs font-mono">
+              <span class="px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
                 {product.category}
               </span>
-              <span class="text-amber-400 text-xs font-bold">
-                &#9733; {product.rating} ({product.reviewsCount} reviews)
+              <span class="text-slate-500">&bull;</span>
+              <span class="text-slate-300 font-semibold">
+                {product.rating.toFixed(1)} / 5.0 ({product.reviewsCount} reviews)
               </span>
             </div>
 
-            <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight mb-4">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
               {product.name}
             </h1>
 
-            <div class="text-3xl font-black text-emerald-400 mb-6 font-mono">
+            <div class="text-3xl font-bold text-white mb-6 font-mono">
               ${product.price.toFixed(2)}
             </div>
 
@@ -53,14 +54,14 @@ export default function ProductDetailPage({ params }: { params?: { id?: string }
               {product.description}
             </p>
 
-            <div class="border-t border-slate-800 pt-6 mb-8">
-              <h3 class="text-xs uppercase font-mono font-bold text-slate-400 tracking-wider mb-4">
-                Key Specifications
-              </h3>
-              <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-slate-300">
+            <div class="border-t border-[#1a2333] pt-6 mb-8">
+              <h2 class="text-xs font-mono uppercase tracking-wider font-semibold text-slate-400 mb-4">
+                Engineering Specifications
+              </h2>
+              <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-slate-300 font-mono">
                 {product.features.map((f) => (
                   <li key={f} class="flex items-center gap-2">
-                    <span class="text-emerald-400 font-bold">&#10003;</span>
+                    <span class="text-emerald-400 font-bold">&check;</span>
                     <span>{f}</span>
                   </li>
                 ))}
@@ -70,12 +71,12 @@ export default function ProductDetailPage({ params }: { params?: { id?: string }
             <div class="flex items-center gap-4">
               <a
                 href="/cart"
-                class="flex-1 py-3.5 rounded-xl bg-emerald-500 text-slate-950 font-bold text-center text-sm hover:bg-emerald-400 transition-colors shadow-lg shadow-emerald-500/20"
+                class="flex-1 py-3 rounded-lg bg-emerald-500 text-slate-950 font-semibold text-center text-sm hover:bg-emerald-400 transition-colors"
               >
                 Add to Cart &bull; ${product.price.toFixed(2)}
               </a>
-              <span class="text-xs text-slate-500 font-mono">
-                {product.inStock ? 'In Stock (Ready to Ship)' : 'Backorder'}
+              <span class="text-xs text-slate-400 font-mono">
+                {product.inStock ? 'In Stock (Ships in 24h)' : 'Backorder'}
               </span>
             </div>
           </div>

@@ -5,32 +5,46 @@ import { Newsletter } from '../components/Newsletter.js';
 import { Footer } from '../components/Footer.js';
 
 export const metadata = {
-  title: 'FrootBlog — Insights on Modern Web Performance',
+  title: 'FrootBlog — Engineering Articles & Systems Architecture',
   description: 'Deep dives into Preact SSR, fullstack TypeScript, and native styling.',
 };
 
 export default function BlogHomePage() {
+  const [featuredPost, ...recentPosts] = POSTS;
+
   return (
-    <div class="min-h-screen flex flex-col justify-between">
+    <div class="min-h-screen bg-[#06090f] text-slate-100 flex flex-col justify-between">
       <Navbar />
 
       <main class="max-w-5xl mx-auto px-6 py-12 flex-1 w-full">
-        {/* Header Banner */}
-        <div class="mb-12 text-center sm:text-left">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs font-semibold text-emerald-400 mb-4">
+        {/* Header Block */}
+        <div class="mb-10">
+          <div class="text-xs font-mono font-medium text-emerald-400 mb-2 uppercase tracking-wide">
             Engineering Journal
           </div>
-          <h1 class="text-4xl sm:text-5xl font-black text-white tracking-tight mb-4">
-            Stories, Architecture & Tutorials
+          <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
+            Systems Architecture & Web Engineering
           </h1>
-          <p class="text-slate-400 text-base sm:text-lg max-w-2xl">
-            Exploring the bleeding edge of sub-millisecond server rendering, zero-overhead client apps, and modern developer velocity.
+          <p class="text-slate-400 text-base max-w-2xl leading-relaxed">
+            Exploring sub-millisecond server rendering, monomorphic dispatch trees, and zero-hydration web architectures.
           </p>
         </div>
 
-        {/* Post Grid */}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {POSTS.map((post) => (
+        {/* Featured Dominant Article */}
+        {featuredPost && <PostCard post={featuredPost} featured={true} />}
+
+        {/* Recent Articles Grid */}
+        <div class="mb-8 flex items-center justify-between border-b border-[#1a2333] pb-3">
+          <h2 class="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">
+            All Articles
+          </h2>
+          <span class="text-xs font-mono text-slate-500">
+            {recentPosts.length + 1} publications
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {recentPosts.map((post) => (
             <PostCard key={post.slug} post={post} />
           ))}
         </div>
