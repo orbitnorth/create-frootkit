@@ -1,4 +1,4 @@
-import { PRODUCTS } from '../data/products.js';
+import { getProducts, PRODUCTS } from '../data/products.js';
 import { Navbar } from '../components/Navbar.js';
 import { ProductCard } from '../components/ProductCard.js';
 import { Footer } from '../components/Footer.js';
@@ -8,7 +8,8 @@ export const metadata = {
   description: 'Precision mechanical keyboards, studio audio, and ergonomic setups.',
 };
 
-export default function StoreHomePage() {
+export default async function StoreHomePage() {
+  const products = await getProducts();
   const categories = ['All Products', 'Keyboards', 'Audio', 'Peripherals', 'Desk Setup', 'Accessories'];
 
   return (
@@ -55,12 +56,12 @@ export default function StoreHomePage() {
             Featured Instruments
           </h2>
           <span class="text-xs text-zinc-500 tabular-nums">
-            {PRODUCTS.length} products available
+            {products.length} products available
           </span>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {PRODUCTS.map((product) => (
+          {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>

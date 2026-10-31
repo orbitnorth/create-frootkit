@@ -129,6 +129,129 @@ export function clearSessionCookie(): string {
   return 'froot_session=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0';
 }
 
+/**
+ * Finds user record by email from DB (with fallback to in-memory).
+ */
+export async function findUserByEmail(email: string): Promise<{ user: User; passwordHash: string } | null> {
+  try {
+    const { db } = await import('../db/index.js');
+    const { users } = await import('../db/schema.js');
+    const { eq } = await import('drizzle-orm');
+    const rows = await db.select().from(users).where(eq(users.email, email));
+    if (rows && rows.length > 0) {
+      const u = rows[0];
+      return {
+        user: {
+          id: u.id,
+          email: u.email,
+          name: u.name,
+          role: u.role as 'user' | 'admin',
+          createdAt: u.createdAt,
+        },
+        passwordHash: u.passwordHash,
+      };
+    }
+  } catch {}
+  return USERS_STORE.get(email) || null;
+}
+
+/**
+ * Finds user record by ID.
+ */
+export async function findUserById(id: string): Promise<User | null> {
+  try {
+    const { db } = await import('../db/index.js');
+    const { users } = await import('../db/schema.js');
+    const { eq } = await import('drizzle-orm');
+    const rows = await db.select().from(users).where(eq(users.id, id));
+    if (rows && rows.length > 0) {
+      const u = rows[0];
+      return {
+        id: u.id,
+        email: u.email,
+        name: u.name,
+        role: u.role as 'user' | 'admin',
+        createdAt: u.createdAt,
+      };
+    }
+  } catch {}
+  for (const entry of USERS_STORE.values()) {
+    if (entry.user.id === id) return entry.user;
+  }
+  return null;
+}
+
+/**
+ * Saves a new user to DB and in-memory store.
+ */
+export async function saveUser(user: User, passwordHash: string): Promise<void> {
+  try {
+    const { db } = await import('../db/index.js');
+    const { users } = await import('../db/schema.js');
+    await db.insert(users).values({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      passwordHash,
+      createdAt: user.createdAt,
+    });
+  } catch {}
+  USERS_STORE.set(user.email, { user, passwordHash });
+}
+
+/**
+ * Saves a session token to DB and in-memory store.
+ */
+export async function saveSession(session: Session): Promise<void> {
+  try {
+    const { db } = await import('../db/index.js');
+    const { sessions } = await import('../db/schema.js');
+    await db.insert(sessions).values({
+      id: session.id,
+      token: session.token,
+      userId: session.userId,
+      expiresAt: session.expiresAt,
+    });
+  } catch {}
+  SESSIONS_STORE.set(session.token, session);
+}
+
+/**
+ * Finds session by token.
+ */
+export async function findSession(token: string): Promise<Session | null> {
+  try {
+    const { db } = await import('../db/index.js');
+    const { sessions } = await import('../db/schema.js');
+    const { eq } = await import('drizzle-orm');
+    const rows = await db.select().from(sessions).where(eq(sessions.token, token));
+    if (rows && rows.length > 0) {
+      const s = rows[0];
+      return {
+        id: s.id,
+        token: s.token,
+        userId: s.userId,
+        expiresAt: s.expiresAt,
+      };
+    }
+  } catch {}
+  return SESSIONS_STORE.get(token) || null;
+}
+
+/**
+ * Deletes a session by token.
+ */
+export async function deleteSession(token: string): Promise<void> {
+  try {
+    const { db } = await import('../db/index.js');
+    const { sessions } = await import('../db/schema.js');
+    const { eq } = await import('drizzle-orm');
+    await db.delete(sessions).where(eq(sessions.token, token));
+  } catch {}
+  SESSIONS_STORE.delete(token);
+}
+
 // Pre-populate demo user: admin@frootkit.dev / password123
 (async () => {
   const demoHash = await hashPassword('password123');

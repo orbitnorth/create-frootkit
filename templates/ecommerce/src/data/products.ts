@@ -19,7 +19,6 @@ export const PRODUCTS: Product[] = [
     category: 'Keyboards',
     rating: 4.9,
     reviewsCount: 128,
-    // Clean minimal anodized aluminum keyboard
     image: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&auto=format&fit=crop&q=80',
     description: 'Aircraft-grade CNC anodized aluminum chassis with custom factory-lubed linear switches and sound-dampening silicone base.',
     features: ['Hot-swappable switches', 'Bluetooth 5.3 & 2.4GHz wireless', 'CNC Aluminum Unibody', 'PBT Dye-Sub Keycaps'],
@@ -32,7 +31,6 @@ export const PRODUCTS: Product[] = [
     category: 'Audio',
     rating: 4.8,
     reviewsCount: 94,
-    // Clean matte dark studio headphones on neutral background (no bright yellow!)
     image: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=800&auto=format&fit=crop&q=80',
     description: 'Precision 50mm dynamic drivers engineered for ultra-flat frequency response, critical mixing, and executive focus.',
     features: ['Planar Magnetic Drivers', 'Memory Foam Cushions', 'Detachable Braided Cable', 'Hard Travel Case'],
@@ -45,7 +43,6 @@ export const PRODUCTS: Product[] = [
     category: 'Peripherals',
     rating: 4.7,
     reviewsCount: 210,
-    // Matte dark ergonomic mouse on neutral slate background
     image: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=800&auto=format&fit=crop&q=80',
     description: 'Sculpted ergonomic contour designed to eliminate wrist fatigue during extended development sessions.',
     features: ['26,000 DPI Optical Sensor', '70-day Battery Life', 'Infinite Magnetic Scroll Wheel', 'Silent Click Switches'],
@@ -58,7 +55,6 @@ export const PRODUCTS: Product[] = [
     category: 'Desk Setup',
     rating: 5.0,
     reviewsCount: 62,
-    // Clean handcrafted wooden desk setup
     image: 'https://images.unsplash.com/photo-1593062096033-9a26b09da705?w=800&auto=format&fit=crop&q=80',
     description: 'Handcrafted from single-origin American walnut with cork feet and an integrated aluminum tray for desk accessories.',
     features: ['Sustainable American Walnut', 'Holds up to 60 lbs', 'Integrated Cable Troughs', 'Hand-finished Matte Oil'],
@@ -71,7 +67,6 @@ export const PRODUCTS: Product[] = [
     category: 'Desk Setup',
     rating: 4.6,
     reviewsCount: 175,
-    // Clean desk surface mat
     image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=800&auto=format&fit=crop&q=80',
     description: 'Water-resistant, stain-proof premium desk surface that provides effortless mouse tracking and protects your workspace.',
     features: ['Water-resistant PU Leather', 'Anti-slip Suede Backing', '90cm x 45cm Large Size', 'Easy to Clean'],
@@ -84,10 +79,53 @@ export const PRODUCTS: Product[] = [
     category: 'Accessories',
     rating: 4.9,
     reviewsCount: 340,
-    // Minimalist braided cable / tech accessory
     image: 'https://images.unsplash.com/photo-1622434641406-a158123450f9?w=800&auto=format&fit=crop&q=80',
     description: 'Ultra-durable Kevlar-reinforced charging cable supporting up to 240W Power Delivery and 40Gbps Thunderbolt data transfer.',
     features: ['240W Power Delivery', 'E-Marker Smart Chip', 'Braided Kevlar Weave', '2-meter Length'],
     inStock: true,
   },
 ];
+
+/**
+ * Returns all products, querying the database if configured or falling back to static PRODUCTS.
+ */
+export async function getProducts(): Promise<Product[]> {
+  try {
+    const { db } = await import('../db/index.js');
+    const { products } = await import('../db/schema.js');
+    const rows = await db.select().from(products);
+    if (rows && rows.length > 0) {
+      return rows.map((r: any) => ({
+        ...r,
+        features: typeof r.features === 'string' ? JSON.parse(r.features) : r.features,
+        inStock: Boolean(r.inStock),
+      }));
+    }
+  } catch {
+    // Database not attached, fallback
+  }
+  return PRODUCTS;
+}
+
+/**
+ * Returns a single product by ID from the database or static store.
+ */
+export async function getProduct(id: string): Promise<Product | undefined> {
+  try {
+    const { db } = await import('../db/index.js');
+    const { products } = await import('../db/schema.js');
+    const { eq } = await import('drizzle-orm');
+    const rows = await db.select().from(products).where(eq(products.id, id));
+    if (rows && rows.length > 0) {
+      const r = rows[0];
+      return {
+        ...r,
+        features: typeof r.features === 'string' ? JSON.parse(r.features) : r.features,
+        inStock: Boolean(r.inStock),
+      };
+    }
+  } catch {
+    // Database not attached, fallback
+  }
+  return PRODUCTS.find((p) => p.id === id);
+}

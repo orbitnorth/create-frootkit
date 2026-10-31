@@ -1,4 +1,4 @@
-import { POSTS } from '../data/posts.js';
+import { getPosts, POSTS } from '../data/posts.js';
 import { Navbar } from '../components/Navbar.js';
 import { PostCard } from '../components/PostCard.js';
 import { Newsletter } from '../components/Newsletter.js';
@@ -9,8 +9,9 @@ export const metadata = {
   description: 'Deep dives into Preact SSR, fullstack TypeScript, and native styling.',
 };
 
-export default function BlogHomePage() {
-  const [featuredPost, ...recentPosts] = POSTS;
+export default async function BlogHomePage() {
+  const allPosts = await getPosts();
+  const [featuredPost, ...recentPosts] = allPosts;
 
   return (
     <div class="min-h-screen bg-[#08090a] text-zinc-100 flex flex-col justify-between selection:bg-indigo-500/20 selection:text-indigo-300">

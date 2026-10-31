@@ -73,3 +73,51 @@ export const POSTS: Post[] = [
     ],
   },
 ];
+
+/**
+ * Returns all articles, querying the database if configured or falling back to static POSTS.
+ */
+export async function getPosts(): Promise<Post[]> {
+  try {
+    const { db } = await import('../db/index.js');
+    const { posts, authors } = await import('../db/schema.js');
+    const dbPosts = await db.select().from(posts);
+    if (dbPosts && dbPosts.length > 0) {
+      const allAuthors = await db.select().from(authors);
+      const authorMap = new Map(allAuthors.map((a: any) => [a.id, a]));
+      return dbPosts.map((p: any) => {
+        const auth = authorMap.get(p.authorId) || {
+          name: 'Alex Rivera',
+          role: 'Staff Systems Architect',
+          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces',
+        };
+        return {
+          slug: p.slug,
+          title: p.title,
+          summary: p.summary,
+          date: 'Recent',
+          readTime: p.readTime,
+          category: p.category,
+          author: {
+            name: auth.name,
+            role: auth.role,
+            avatar: auth.avatar,
+          },
+          tags: ['FrootKit', 'Architecture', 'TypeScript'],
+          content: typeof p.content === 'string' ? JSON.parse(p.content) : p.content,
+        };
+      });
+    }
+  } catch {
+    // Database not attached, fallback
+  }
+  return POSTS;
+}
+
+/**
+ * Returns a single article by slug.
+ */
+export async function getPostBySlug(slug: string): Promise<Post | undefined> {
+  const allPosts = await getPosts();
+  return allPosts.find((p) => p.slug === slug);
+}

@@ -1,4 +1,4 @@
-import { PRODUCTS } from '../../../data/products.js';
+import { getProduct, PRODUCTS } from '../../../data/products.js';
 import { Navbar } from '../../../components/Navbar.js';
 import { Footer } from '../../../components/Footer.js';
 
@@ -6,9 +6,9 @@ export async function generateStaticParams() {
   return PRODUCTS.map((p) => ({ id: p.id }));
 }
 
-export default function ProductDetailPage({ params }: { params?: { id?: string } }) {
+export default async function ProductDetailPage({ params }: { params?: { id?: string } }) {
   const id = params?.id || 'nordic-mechanical-keyboard';
-  const product = PRODUCTS.find((p) => p.id === id) || PRODUCTS[0]!;
+  const product = (await getProduct(id)) || PRODUCTS[0]!;
 
   return (
     <div class="min-h-screen bg-[#090a0f] text-zinc-100 flex flex-col justify-between selection:bg-white/20 selection:text-white">

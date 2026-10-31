@@ -3,7 +3,7 @@ import * as path from 'node:path';
 import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
 import { generateFrootKitTemplate, DEFAULT_GITIGNORE } from './template.js';
-import { applyDatabaseAddon, type DatabaseOption } from './addons/database.js';
+import { applyDatabaseAddon, seedPhysicalDatabase, type DatabaseOption } from './addons/database.js';
 import { applyLinterAddon, type LinterOption } from './addons/linter.js';
 import { applyAgentAddon } from './addons/agent.js';
 import { applyDockerAddon } from './addons/docker.js';
@@ -74,6 +74,11 @@ export async function scaffoldProject(options: ScaffoldOptions): Promise<Scaffol
     const fullPath = path.join(targetDir, relPath);
     await fs.mkdir(path.dirname(fullPath), { recursive: true });
     await fs.writeFile(fullPath, files[relPath]!, 'utf8');
+  }
+
+  // Pre-seed physical SQLite database with complete schemas and actual data
+  if (db !== 'none') {
+    seedPhysicalDatabase(targetDir, db, template);
   }
 
   writeSpinner.stop(`Created ${filePaths.length} project files`);

@@ -5,8 +5,12 @@ import {
   parseCookies,
   createSessionCookie,
   clearSessionCookie,
-  USERS_STORE,
-  SESSIONS_STORE,
+  findUserByEmail,
+  findUserById,
+  saveUser,
+  findSession,
+  saveSession,
+  deleteSession,
   type User,
 } from '../../../lib/auth.js';
 
@@ -21,7 +25,7 @@ export async function GET(req: Request): Promise<Response> {
     );
   }
 
-  const session = SESSIONS_STORE.get(sessionToken);
+  const session = await findSession(sessionToken);
   if (!session) {
     return Response.json(
       { authenticated: false, user: null },
@@ -29,8 +33,8 @@ export async function GET(req: Request): Promise<Response> {
     );
   }
 
-  const userRecord = Array.from(USERS_STORE.values()).find((r) => r.user.id === session.userId);
-  if (!userRecord) {
+  const user = await findUserById(session.userId);
+  if (!user) {
     return Response.json(
       { authenticated: false, user: null },
       { status: 401 }
@@ -38,7 +42,7 @@ export async function GET(req: Request): Promise<Response> {
   }
 
   return Response.json(
-    { authenticated: true, user: userRecord.user },
+    { authenticated: true, user },
     { status: 200 }
   );
 }
@@ -51,7 +55,7 @@ export async function POST(req: Request): Promise<Response> {
     const cookies = parseCookies(req.headers.get('cookie'));
     const token = cookies['froot_session'];
     if (token) {
-      SESSIONS_STORE.delete(token);
+      await deleteSession(token);
     }
 
     return new Response(null, {
@@ -87,7 +91,8 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   if (action === 'signup') {
-    if (USERS_STORE.has(email)) {
+    const existing = await findUserByEmail(email);
+    if (existing) {
       return Response.json({ error: 'User already exists' }, { status: 409 });
     }
 
@@ -100,10 +105,10 @@ export async function POST(req: Request): Promise<Response> {
       createdAt: new Date().toISOString(),
     };
 
-    USERS_STORE.set(email, { user, passwordHash });
+    await saveUser(user, passwordHash);
 
     const token = createSessionToken();
-    SESSIONS_STORE.set(token, {
+    await saveSession({
       id: 'sess_' + Math.random().toString(36).substring(2, 9),
       token,
       userId: user.id,
@@ -120,7 +125,7 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   // Default: Login
-  const record = USERS_STORE.get(email);
+  const record = await findUserByEmail(email);
   if (!record) {
     return Response.json({ error: 'Invalid credentials' }, { status: 401 });
   }
@@ -131,7 +136,7 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   const token = createSessionToken();
-  SESSIONS_STORE.set(token, {
+  await saveSession({
     id: 'sess_' + Math.random().toString(36).substring(2, 9),
     token,
     userId: record.user.id,

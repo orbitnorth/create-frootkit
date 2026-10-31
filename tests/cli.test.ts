@@ -122,6 +122,17 @@ describe('⚡ create-frootkit Scaffolder', () => {
     assert.ok(schemaContent.includes('products'), 'Store schema must define products table');
     assert.ok(schemaContent.includes('orders'), 'Store schema must define orders table');
 
+    const sqliteDbStat = await fs.stat(path.join(tempDir, 'sqlite.db'));
+    assert.ok(sqliteDbStat.isFile());
+    assert.ok(sqliteDbStat.size > 0, 'sqlite.db must be physically seeded with real data (> 0 bytes)');
+
+    const { DatabaseSync } = await import('node:sqlite');
+    const db = new DatabaseSync(path.join(tempDir, 'sqlite.db'));
+    const rows = db.prepare('SELECT id, name, price FROM products').all() as any[];
+    assert.strictEqual(rows.length, 6, 'Must seed all 6 actual products');
+    assert.strictEqual(rows[0].id, 'nordic-mechanical-keyboard');
+    db.close();
+
     await fs.rm(tempDir, { recursive: true, force: true });
   });
 
@@ -162,6 +173,18 @@ describe('⚡ create-frootkit Scaffolder', () => {
     const schemaContent = await fs.readFile(path.join(tempDir, 'src/db/schema.ts'), 'utf8');
     assert.ok(schemaContent.includes('passwordHash') || schemaContent.includes('password_hash'), 'Auth schema must store password hash');
     assert.ok(schemaContent.includes('sessions'), 'Auth schema must define sessions table');
+
+    const sqliteDbStat = await fs.stat(path.join(tempDir, 'sqlite.db'));
+    assert.ok(sqliteDbStat.isFile());
+    assert.ok(sqliteDbStat.size > 0, 'sqlite.db must be physically seeded with real data (> 0 bytes)');
+
+    const { DatabaseSync } = await import('node:sqlite');
+    const db = new DatabaseSync(path.join(tempDir, 'sqlite.db'));
+    const users = db.prepare('SELECT id, email, role FROM users').all() as any[];
+    assert.ok(users.length >= 4, 'Must seed all 4 actual team members and admin');
+    const admin = users.find(u => u.email === 'admin@frootkit.dev');
+    assert.ok(admin, 'Must have pre-seeded admin@frootkit.dev');
+    db.close();
 
     await fs.rm(tempDir, { recursive: true, force: true });
   });

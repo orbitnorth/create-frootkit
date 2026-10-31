@@ -1,4 +1,4 @@
-import { POSTS } from '../../../data/posts.js';
+import { getPostBySlug, POSTS } from '../../../data/posts.js';
 import { Navbar } from '../../../components/Navbar.js';
 import { Footer } from '../../../components/Footer.js';
 
@@ -6,9 +6,9 @@ export async function generateStaticParams() {
   return POSTS.map((post) => ({ slug: post.slug }));
 }
 
-export default function BlogPostPage({ params }: { params?: { slug?: string } }) {
+export default async function BlogPostPage({ params }: { params?: { slug?: string } }) {
   const slug = params?.slug || 'welcome-to-frootkit';
-  const post = POSTS.find((p) => p.slug === slug) || POSTS[0]!;
+  const post = (await getPostBySlug(slug)) || POSTS[0]!;
 
   return (
     <div class="min-h-screen bg-[#08090a] text-zinc-100 flex flex-col justify-between selection:bg-indigo-500/20 selection:text-indigo-300">
