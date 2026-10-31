@@ -9,7 +9,7 @@ export interface RootLayoutProps {
 }
 
 export default function RootLayout({ children, metadata }: RootLayoutProps) {
-  const title = metadata?.title || 'FrootSaaS — Modern Cloud Platform';
+  const title = metadata?.title || 'FrootAuth — Modern Cloud Platform';
   const description =
     metadata?.description ||
     'Fullstack SaaS application with authentication and real-time dashboard powered by Preact and FrootKit.';
@@ -24,12 +24,12 @@ export default function RootLayout({ children, metadata }: RootLayoutProps) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
           rel="stylesheet"
         />
         <link rel="stylesheet" href="/styles.css" />
       </head>
-      <body class="bg-[#030712] text-slate-100 min-h-screen antialiased selection:bg-emerald-500/20 selection:text-emerald-300 font-sans">
+      <body class="bg-[#08090a] text-zinc-100 min-h-screen antialiased selection:bg-indigo-500/20 selection:text-indigo-300 font-sans">
         {children}
       </body>
     </html>

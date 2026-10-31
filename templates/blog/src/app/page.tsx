@@ -5,7 +5,7 @@ import { Newsletter } from '../components/Newsletter.js';
 import { Footer } from '../components/Footer.js';
 
 export const metadata = {
-  title: 'FrootBlog — Engineering Articles & Systems Architecture',
+  title: 'FrootJournal — Engineering Articles & Systems Architecture',
   description: 'Deep dives into Preact SSR, fullstack TypeScript, and native styling.',
 };
 
@@ -13,19 +13,20 @@ export default function BlogHomePage() {
   const [featuredPost, ...recentPosts] = POSTS;
 
   return (
-    <div class="min-h-screen bg-[#06090f] text-slate-100 flex flex-col justify-between">
+    <div class="min-h-screen bg-[#08090a] text-zinc-100 flex flex-col justify-between selection:bg-indigo-500/20 selection:text-indigo-300">
       <Navbar />
 
-      <main class="max-w-5xl mx-auto px-6 py-12 flex-1 w-full">
+      <main class="max-w-5xl mx-auto px-6 py-12 sm:py-16 flex-1 w-full">
         {/* Header Block */}
-        <div class="mb-10">
-          <div class="text-xs font-mono font-medium text-emerald-400 mb-2 uppercase tracking-wide">
-            Engineering Journal
+        <div class="mb-12">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-medium mb-4">
+            <span class="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+            <span>Systems Architecture Journal</span>
           </div>
-          <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
-            Systems Architecture & Web Engineering
+          <h1 class="text-3xl sm:text-5xl font-semibold text-white tracking-[-0.03em] leading-tight mb-4">
+            Engineering Dispatch & Systems Architecture.
           </h1>
-          <p class="text-slate-400 text-base max-w-2xl leading-relaxed">
+          <p class="text-zinc-400 text-base max-w-2xl leading-relaxed">
             Exploring sub-millisecond server rendering, monomorphic dispatch trees, and zero-hydration web architectures.
           </p>
         </div>
@@ -34,16 +35,16 @@ export default function BlogHomePage() {
         {featuredPost && <PostCard post={featuredPost} featured={true} />}
 
         {/* Recent Articles Grid */}
-        <div class="mb-8 flex items-center justify-between border-b border-[#1a2333] pb-3">
-          <h2 class="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">
-            All Articles
+        <div class="mb-8 flex items-center justify-between border-b border-white/[0.08] pb-4">
+          <h2 class="text-xs uppercase tracking-wider text-zinc-400 font-semibold">
+            Recent Publications
           </h2>
-          <span class="text-xs font-mono text-slate-500">
+          <span class="text-xs text-zinc-500 tabular-nums">
             {recentPosts.length + 1} publications
           </span>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           {recentPosts.map((post) => (
             <PostCard key={post.slug} post={post} />
           ))}

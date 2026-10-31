@@ -8,11 +8,11 @@ export const metadata = {
 
 export default function CartPage() {
   return (
-    <div class="min-h-screen bg-[#06090f] text-slate-100 flex flex-col justify-between">
+    <div class="min-h-screen bg-[#090a0f] text-zinc-100 flex flex-col justify-between selection:bg-white/20 selection:text-white">
       <Navbar />
 
-      <main class="max-w-4xl mx-auto px-6 py-12 flex-1 w-full">
-        <h1 class="text-3xl font-extrabold text-white mb-8">Order Cart</h1>
+      <main class="max-w-3xl mx-auto px-6 py-12 flex-1 w-full">
+        <h1 class="text-2xl font-semibold text-white tracking-tight mb-6">Shopping Cart</h1>
         <CartDrawer />
       </main>
 

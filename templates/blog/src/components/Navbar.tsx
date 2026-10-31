@@ -1,30 +1,32 @@
 export function Navbar() {
   return (
-    <header class="border-b border-[#1a2333] bg-[#06090f]/95 sticky top-0 z-50">
-      <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-        <a href="/" class="flex items-center gap-3 font-bold text-white text-base tracking-tight hover:text-emerald-400 transition-colors">
-          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-            <svg width="16" height="16" class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+    <header class="border-b border-white/[0.08] bg-[#08090a]/80 backdrop-blur-md sticky top-0 z-50">
+      <div class="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2.5 font-semibold text-zinc-100 text-sm tracking-tight group">
+          <div class="w-6 h-6 rounded-md bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400 group-hover:border-indigo-400/50 transition-colors shrink-0">
+            <svg style="width: 13px; height: 13px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
             </svg>
           </div>
-          <span>Froot<span class="text-emerald-400">Blog</span></span>
+          <span>Froot<span class="text-indigo-400">Journal</span></span>
         </a>
 
-        <nav class="flex items-center gap-6 text-sm font-medium">
-          <a href="/" class="text-slate-300 hover:text-white transition-colors">
+        <nav class="flex items-center gap-5 text-xs font-medium">
+          <a href="/" class="text-zinc-400 hover:text-zinc-200 transition-colors">
             Articles
           </a>
-          <a href="/api/posts" class="text-emerald-400 hover:text-emerald-300 font-mono text-xs px-2.5 py-1 rounded-md bg-[#0a0f18] border border-[#1a2333] transition-colors">
+          <a
+            href="/api/posts"
+            class="text-zinc-400 hover:text-zinc-200 font-mono text-[11px] px-2 py-0.5 rounded bg-white/[0.03] border border-white/[0.06] transition-colors"
+          >
             /api/posts
           </a>
           <a
-            href="https://github.com/orbitnorth/frootkit"
-            target="_blank"
-            rel="noreferrer"
-            class="text-slate-300 hover:text-white transition-colors"
+            href="#newsletter"
+            class="px-3 py-1.5 rounded-md bg-white text-zinc-950 font-medium hover:bg-zinc-200 transition-all text-xs shadow-sm"
           >
-            GitHub
+            Subscribe
           </a>
         </nav>
       </div>

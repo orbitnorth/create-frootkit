@@ -1,32 +1,39 @@
 export function Navbar() {
   return (
-    <header class="border-b border-[#1a2333] bg-[#06090f]/95 sticky top-0 z-50">
-      <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <a href="/" class="flex items-center gap-3 font-bold text-white text-base tracking-tight hover:text-emerald-400 transition-colors">
-          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-            <svg width="16" height="16" class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+    <header class="border-b border-white/[0.08] bg-[#090a0f]/80 backdrop-blur-md sticky top-0 z-50">
+      <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2.5 font-semibold text-zinc-100 text-sm tracking-tight group">
+          <div class="w-7 h-7 rounded-md bg-white/[0.06] border border-white/[0.1] flex items-center justify-center text-zinc-200 group-hover:border-white/[0.2] transition-colors shrink-0">
+            <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 0 1-8 0" />
             </svg>
           </div>
-          <span>Froot<span class="text-emerald-400">Store</span></span>
+          <span>Froot<span class="text-zinc-400 font-normal">Store</span></span>
         </a>
 
-        <nav class="flex items-center gap-6 text-sm font-medium">
-          <a href="/" class="text-slate-300 hover:text-white transition-colors">
+        <nav class="flex items-center gap-5 text-xs font-medium">
+          <a href="/#catalog" class="text-zinc-400 hover:text-zinc-200 transition-colors">
             Catalog
           </a>
-          <a href="/api/products" class="text-emerald-400 hover:text-emerald-300 font-mono text-xs px-2.5 py-1 rounded-md bg-[#0a0f18] border border-[#1a2333] transition-colors">
+          <a
+            href="/api/products"
+            class="text-zinc-400 hover:text-zinc-200 font-mono text-[11px] px-2 py-0.5 rounded bg-white/[0.03] border border-white/[0.06] transition-colors"
+          >
             /api/products
           </a>
           <a
             href="/cart"
-            class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#0a0f18] border border-[#1a2333] text-slate-200 hover:border-slate-700 hover:text-white transition-colors text-xs font-semibold"
+            class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.05] border border-white/[0.08] text-zinc-200 hover:text-white hover:bg-white/[0.08] transition-all text-xs font-medium"
           >
-            <svg width="14" height="14" class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            <svg style="width: 13px; height: 13px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 0 1-8 0" />
             </svg>
             <span>Cart</span>
-            <span class="px-1.5 py-0.2 rounded bg-emerald-500 text-slate-950 font-bold text-[10px]">
+            <span class="px-1.5 py-0.2 rounded-full bg-white text-zinc-950 font-bold text-[10px] tabular-nums">
               2
             </span>
           </a>

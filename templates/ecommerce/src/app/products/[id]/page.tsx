@@ -11,73 +11,82 @@ export default function ProductDetailPage({ params }: { params?: { id?: string }
   const product = PRODUCTS.find((p) => p.id === id) || PRODUCTS[0]!;
 
   return (
-    <div class="min-h-screen bg-[#06090f] text-slate-100 flex flex-col justify-between">
+    <div class="min-h-screen bg-[#090a0f] text-zinc-100 flex flex-col justify-between selection:bg-white/20 selection:text-white">
       <Navbar />
 
       <main class="max-w-6xl mx-auto px-6 py-12 flex-1 w-full">
         <a
           href="/"
-          class="inline-flex items-center gap-2 text-xs font-mono text-slate-400 hover:text-emerald-400 mb-8 transition-colors"
+          class="inline-flex items-center gap-2 text-xs text-zinc-400 hover:text-white mb-8 transition-colors"
         >
-          ← Back to catalog
+          <span>←</span>
+          <span>Back to catalog</span>
         </a>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          <div class="rounded-xl border border-[#1a2333] overflow-hidden bg-[#0a0f18] aspect-[4/3]">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          {/* Product Gallery Image */}
+          <div class="rounded-2xl border border-white/[0.08] overflow-hidden bg-[#0f1117] aspect-[4/3] shadow-2xl relative">
             <img
               src={product.image}
               alt={product.name}
               class="w-full h-full object-cover"
             />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
           </div>
 
+          {/* Details & Purchase */}
           <div>
-            <div class="flex items-center gap-3 mb-3 text-xs font-mono">
-              <span class="px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
+            <div class="flex items-center gap-3 mb-3 text-xs">
+              <span class="px-2.5 py-0.5 rounded-full bg-white/[0.04] text-zinc-300 border border-white/[0.08] font-medium text-[11px] uppercase tracking-wider">
                 {product.category}
               </span>
-              <span class="text-slate-500">•</span>
-              <span class="text-slate-300 font-semibold">
-                {product.rating.toFixed(1)} / 5.0 ({product.reviewsCount} reviews)
-              </span>
+              <span class="text-zinc-600">•</span>
+              <div class="flex items-center gap-1.5 text-zinc-400 font-medium">
+                <span class="text-amber-400">★</span>
+                <span class="text-zinc-200 tabular-nums">{product.rating.toFixed(1)}</span>
+                <span class="text-zinc-500 tabular-nums">({product.reviewsCount} verified reviews)</span>
+              </div>
             </div>
 
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
+            <h1 class="text-3xl sm:text-4xl font-semibold text-white tracking-[-0.025em] mb-4">
               {product.name}
             </h1>
 
-            <div class="text-3xl font-bold text-white mb-6 font-mono">
+            <div class="text-3xl font-semibold text-white mb-6 tabular-nums">
               ${product.price.toFixed(2)}
             </div>
 
-            <p class="text-slate-300 text-base leading-relaxed mb-8">
+            <p class="text-zinc-300 text-sm sm:text-base leading-relaxed mb-8">
               {product.description}
             </p>
 
-            <div class="border-t border-[#1a2333] pt-6 mb-8">
-              <h2 class="text-xs font-mono uppercase tracking-wider font-semibold text-slate-400 mb-4">
-                Engineering Specifications
+            <div class="border-t border-white/[0.08] pt-6 mb-8">
+              <h2 class="text-xs uppercase tracking-wider font-semibold text-zinc-400 mb-4">
+                Hardware Specifications
               </h2>
-              <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-slate-300 font-mono">
+              <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-zinc-300">
                 {product.features.map((f) => (
                   <li key={f} class="flex items-center gap-2">
-                    <span class="text-emerald-400 font-bold">✓</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-zinc-400 shrink-0" />
                     <span>{f}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div class="flex items-center gap-4">
+            <div class="flex flex-col sm:flex-row sm:items-center gap-4 pt-2">
               <a
                 href="/cart"
-                class="flex-1 py-3 rounded-lg bg-emerald-500 text-slate-950 font-semibold text-center text-sm hover:bg-emerald-400 transition-colors"
+                class="flex-1 py-3 px-6 rounded-xl bg-white text-zinc-950 font-medium text-center text-sm hover:bg-zinc-200 transition-all shadow-md flex items-center justify-center gap-2"
               >
-                Add to Cart • ${product.price.toFixed(2)}
+                <span>Add to Cart</span>
+                <span class="text-zinc-500">•</span>
+                <span class="tabular-nums font-semibold">${product.price.toFixed(2)}</span>
               </a>
-              <span class="text-xs text-slate-400 font-mono">
-                {product.inStock ? 'In Stock (Ships in 24h)' : 'Backorder'}
-              </span>
+              <div class="flex items-center gap-2 text-xs text-zinc-400 px-3">
+                <span class="w-2 h-2 rounded-full bg-emerald-400" />
+                <span>{product.inStock ? 'In Stock · Ships in 24h' : 'Backorder'}</span>
+              </div>
             </div>
           </div>
         </div>

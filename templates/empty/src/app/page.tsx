@@ -5,21 +5,22 @@ export const metadata = {
 
 export default function HomePage() {
   return (
-    <main class="min-h-screen bg-[#06090f] text-slate-100 flex items-center justify-center p-6">
-      <div class="max-w-md w-full text-center border border-[#1a2333] bg-[#0a0f18] rounded-xl p-8">
-        <div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto mb-4 text-emerald-400 font-bold text-lg font-mono">
+    <main class="min-h-screen bg-[#08090a] text-zinc-100 flex items-center justify-center p-6 selection:bg-indigo-500/20 selection:text-indigo-300">
+      <div class="max-w-md w-full text-center border border-white/[0.08] bg-[#0f1117] rounded-xl p-8 shadow-2xl shadow-black/40 relative overflow-hidden">
+        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />
+        <div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/25 flex items-center justify-center mx-auto mb-4 text-indigo-400 font-medium text-sm">
           F
         </div>
-        <h1 class="text-2xl font-bold text-white mb-2">Blank Canvas</h1>
-        <p class="text-slate-400 text-sm mb-6 leading-relaxed">
-          Start building by editing <code class="font-mono text-emerald-400 bg-[#06090f] border border-[#1a2333] px-1.5 py-0.5 rounded">src/app/page.tsx</code>.
+        <h1 class="text-xl font-semibold text-white tracking-tight mb-2">Blank Canvas</h1>
+        <p class="text-zinc-400 text-xs mb-6 leading-relaxed">
+          Start building by editing <code class="font-mono text-indigo-400 bg-white/[0.04] border border-white/[0.08] px-1.5 py-0.5 rounded">src/app/page.tsx</code>.
         </p>
-        <div class="flex justify-center gap-3 text-xs font-medium">
+        <div class="flex justify-center gap-2.5 text-xs font-medium">
           <a
             href="https://frootjs.org"
             target="_blank"
             rel="noreferrer"
-            class="px-4 py-2 rounded-lg bg-emerald-500 text-slate-950 font-semibold hover:bg-emerald-400 transition-colors"
+            class="px-3.5 py-1.5 rounded-lg bg-white text-zinc-950 font-medium hover:bg-zinc-200 transition-all shadow-sm"
           >
             Documentation
           </a>
@@ -27,7 +28,7 @@ export default function HomePage() {
             href="https://github.com/orbitnorth/frootkit"
             target="_blank"
             rel="noreferrer"
-            class="px-4 py-2 rounded-lg bg-[#06090f] border border-[#1a2333] text-slate-300 hover:text-white transition-colors"
+            class="px-3.5 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.08] text-zinc-300 hover:text-white hover:bg-white/[0.08] transition-all"
           >
             GitHub
           </a>

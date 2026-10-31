@@ -9,11 +9,11 @@ export interface RootLayoutProps {
 }
 
 export default function RootLayout({ children, metadata }: RootLayoutProps) {
-  const title = metadata?.title || 'FrootKit App';
-  const description = metadata?.description || 'Built with FrootKit & Preact';
+  const title = metadata?.title || 'FrootKit Project';
+  const description = metadata?.description || 'Built with Preact and FrootKit.';
 
   return (
-    <html lang="en" class="dark">
+    <html lang="en" class="dark scroll-smooth">
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,12 +22,12 @@ export default function RootLayout({ children, metadata }: RootLayoutProps) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
           rel="stylesheet"
         />
         <link rel="stylesheet" href="/styles.css" />
       </head>
-      <body class="bg-slate-950 text-slate-100 min-h-screen antialiased">
+      <body class="bg-[#08090a] text-zinc-100 min-h-screen antialiased selection:bg-indigo-500/20 selection:text-indigo-300 font-sans">
         {children}
       </body>
     </html>

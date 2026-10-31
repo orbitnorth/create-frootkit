@@ -11,52 +11,55 @@ export function CartDrawer() {
   const total = subtotal + shipping;
 
   return (
-    <div class="rounded-xl border border-[#1a2333] bg-[#0a0f18] p-6 sm:p-8">
-      <h2 class="text-lg font-bold text-white mb-6 flex items-center justify-between border-b border-[#1a2333] pb-4">
+    <div class="rounded-xl border border-white/[0.08] bg-[#0f1117] p-6 sm:p-8 shadow-xl">
+      <h2 class="text-base font-semibold text-white mb-6 flex items-center justify-between border-b border-white/[0.08] pb-4">
         <span>Order Summary</span>
-        <span class="text-xs font-mono text-emerald-400 font-semibold">{cartItems.length} items</span>
+        <span class="text-xs text-zinc-400 font-medium px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.06] tabular-nums">
+          {cartItems.length} items
+        </span>
       </h2>
 
       <div class="space-y-4 mb-6">
         {cartItems.map(({ product, quantity }) => (
-          <div key={product.id} class="flex items-center gap-4 pb-4 border-b border-[#1a2333]">
+          <div key={product.id} class="flex items-center gap-4 pb-4 border-b border-white/[0.06]">
             <img
               src={product.image}
               alt={product.name}
-              class="w-14 h-14 rounded-lg object-cover bg-[#06090f] border border-[#1a2333]"
+              class="w-14 h-14 rounded-lg object-cover bg-zinc-950/40 border border-white/[0.08]"
             />
             <div class="flex-1 min-w-0">
-              <h4 class="text-sm font-semibold text-white truncate">{product.name}</h4>
-              <div class="text-xs text-slate-400 font-mono mt-0.5">Qty: {quantity} × ${product.price.toFixed(2)}</div>
+              <h4 class="text-xs sm:text-sm font-medium text-zinc-100 truncate">{product.name}</h4>
+              <div class="text-xs text-zinc-400 mt-0.5 tabular-nums">Qty: {quantity} × ${product.price.toFixed(2)}</div>
             </div>
-            <div class="font-bold text-sm text-white font-mono">
+            <div class="font-medium text-xs sm:text-sm text-white tabular-nums">
               ${(product.price * quantity).toFixed(2)}
             </div>
           </div>
         ))}
       </div>
 
-      <div class="space-y-2.5 text-xs text-slate-300 mb-6 font-mono">
+      <div class="space-y-2.5 text-xs text-zinc-300 mb-6">
         <div class="flex justify-between">
-          <span class="text-slate-400">Subtotal</span>
-          <span class="text-white font-bold">${subtotal.toFixed(2)}</span>
+          <span class="text-zinc-400">Subtotal</span>
+          <span class="text-white font-medium tabular-nums">${subtotal.toFixed(2)}</span>
         </div>
         <div class="flex justify-between">
-          <span class="text-slate-400">Standard Shipping</span>
-          <span class="text-emerald-400 font-semibold">{shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}</span>
+          <span class="text-zinc-400">Standard Shipping</span>
+          <span class="text-emerald-400 font-medium">{shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}</span>
         </div>
-        <div class="pt-3 border-t border-[#1a2333] flex justify-between text-sm text-white font-bold">
+        <div class="pt-3 border-t border-white/[0.08] flex justify-between text-sm text-white font-semibold">
           <span>Total</span>
-          <span class="text-emerald-400 text-base font-mono font-black">${total.toFixed(2)}</span>
+          <span class="text-base text-white tabular-nums">${total.toFixed(2)}</span>
         </div>
       </div>
 
       <form action="/api/checkout" method="POST">
         <button
           type="submit"
-          class="w-full py-3 rounded-lg bg-emerald-500 text-slate-950 font-semibold text-sm hover:bg-emerald-400 transition-colors"
+          class="w-full py-3 rounded-lg bg-white text-zinc-950 font-medium text-xs hover:bg-zinc-200 transition-all shadow-sm flex items-center justify-center gap-2 group"
         >
-          Proceed to Checkout →
+          <span>Proceed to Checkout</span>
+          <span class="text-zinc-500 group-hover:translate-x-0.5 transition-transform">→</span>
         </button>
       </form>
     </div>
