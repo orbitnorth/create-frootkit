@@ -1,0 +1,24 @@
+{
+  "name": "{{PROJECT_NAME}}",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "frootkit dev",
+    "build": "frootkit build",
+    "start": "frootkit start"
+  },
+  "dependencies": {
+    "frootkit": "npm:froot-kit@^1.3.1",
+    "froot-kit": "^1.3.1",
+    "frootjs": "^1.0.6",
+    "preact": "^11.1.0",
+    "preact-render-to-string": "^6.8.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.0.0",
+    "tailwindcss": "^4.0.0",
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.8.0"
+  }
+}

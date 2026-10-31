@@ -14,6 +14,7 @@ const execAsync = promisify(exec);
 export interface ScaffoldOptions {
   targetDir: string;
   projectName: string;
+  template?: string;
   pkgManager?: 'pnpm' | 'npm' | 'yarn' | 'bun';
   db?: DatabaseOption;
   linter?: LinterOption;
@@ -33,6 +34,7 @@ export async function scaffoldProject(options: ScaffoldOptions): Promise<Scaffol
   const {
     targetDir,
     projectName,
+    template = 'starter',
     pkgManager = 'npm',
     db = 'none',
     linter = 'none',
@@ -45,11 +47,11 @@ export async function scaffoldProject(options: ScaffoldOptions): Promise<Scaffol
   await fs.mkdir(targetDir, { recursive: true });
 
   const writeSpinner = new Spinner('Scaffolding FrootKit application').start();
-  const files = generateFrootKitTemplate(projectName);
+  const files = generateFrootKitTemplate(projectName, template);
 
   // Apply Add-ons
   if (db !== 'none') {
-    applyDatabaseAddon(files, db);
+    applyDatabaseAddon(files, db, template);
   }
   if (linter !== 'none') {
     applyLinterAddon(files, linter);

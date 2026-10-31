@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# FrootKit build output
+.froot/
+dist/
+.cache/
+
+# Databases
+*.db
+*.db-journal
+
+# Environment
+.env
+.env.local
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log

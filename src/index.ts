@@ -26,10 +26,11 @@ export * from './template.js';
 export * from './scaffold.js';
 export * from './ui.js';
 
-const VERSION = '1.1.4';
+const VERSION = '1.2.0';
 
 interface ParsedArgs {
   targetDir?: string;
+  template?: string;
   pkgManager?: 'pnpm' | 'npm' | 'yarn' | 'bun';
   db?: DatabaseOption;
   linter?: LinterOption;
@@ -94,6 +95,20 @@ function parseCliArgs(argv: string[]): ParsedArgs {
       args.pkgManager = raw[++i] as any;
     } else if (item.startsWith('--pm=')) {
       args.pkgManager = item.split('=')[1] as any;
+    } else if (item === '--template' || item === '-t') {
+      args.template = raw[++i];
+    } else if (item.startsWith('--template=')) {
+      args.template = item.split('=')[1];
+    } else if (item === '--starter') {
+      args.template = 'starter';
+    } else if (item === '--empty') {
+      args.template = 'empty';
+    } else if (item === '--blog') {
+      args.template = 'blog';
+    } else if (item === '--ecommerce' || item === '--store') {
+      args.template = 'ecommerce';
+    } else if (item === '--auth' || item === '--saas') {
+      args.template = 'auth';
     } else if (!item.startsWith('-') && !args.targetDir) {
       args.targetDir = item;
     }
@@ -111,6 +126,7 @@ function printUsage(): void {
     npx create-frootkit [project-directory] [options]
 
   ${c.bold}Options:${c.reset}
+    -t, --template <name>    Starter template: starter | blog | ecommerce | auth | empty
     --pm <manager>           Package manager: pnpm | npm | yarn | bun
     --db <orm>               Database ORM: none | drizzle | prisma
     --linter <tool>          Linter & formatter: none | biome | eslint
@@ -134,6 +150,12 @@ function printAgentSchema(): void {
     usage: 'npm create frootkit [project-directory] [options]',
     nonInteractiveFlag: '-y or --yes',
     options: {
+      template: {
+        flag: '--template <name>',
+        choices: ['starter', 'blog', 'ecommerce', 'auth', 'empty'],
+        default: 'starter',
+        description: 'Starter template with polished layout, components, and real models',
+      },
       packageManager: {
         flag: '--pm <manager>',
         choices: ['pnpm', 'npm', 'yarn', 'bun'],
@@ -144,7 +166,7 @@ function printAgentSchema(): void {
         flag: '--db <orm>',
         choices: ['none', 'drizzle', 'prisma'],
         default: 'none',
-        description: 'Database ORM integration with SQLite starter',
+        description: 'Database ORM integration with template-tailored models and SQLite seed',
       },
       linter: {
         flag: '--linter <tool>',
@@ -208,7 +230,7 @@ async function main(): Promise<void> {
     if (args.yes) {
       targetDir = 'my-frootkit-app';
     } else {
-      printStep(1, 7, 'Project Directory');
+      printStep(1, 8, 'Project Directory');
       targetDir = await promptText('Directory name:', 'my-frootkit-app', (input) => {
         if (!input.trim()) return 'Project name cannot be empty';
         return true;
@@ -235,13 +257,55 @@ async function main(): Promise<void> {
     }
   }
 
-  // 2. Package Manager Selection (do not detect, always ask the user)
+  // 2. Starter Template Selection
+  let template = args.template;
+  if (!template) {
+    if (args.yes) {
+      template = 'starter';
+    } else {
+      printStep(2, 8, 'Starter Template');
+      template = await promptSelect<string>(
+        'Choose a project template:',
+        [
+          {
+            value: 'starter',
+            label: 'Starter (Recommended)',
+            hint: 'Developer showcase with hero, Tailwind v4, and health API',
+          },
+          {
+            value: 'blog',
+            label: 'Blog & Content',
+            hint: 'Engineering articles, dynamic [slug] routes, and search API',
+          },
+          {
+            value: 'ecommerce',
+            label: 'E-Commerce Store',
+            hint: 'Product catalog, [id] details, cart & checkout API',
+          },
+          {
+            value: 'auth',
+            label: 'SaaS & Authentication',
+            hint: 'Web Crypto PBKDF2 hashing, sessions, login, signup & dashboard',
+          },
+          {
+            value: 'empty',
+            label: 'Minimal Canvas',
+            hint: 'Blank slate with Preact SSR and Tailwind CSS',
+          },
+        ],
+        0
+      );
+      console.log();
+    }
+  }
+
+  // 3. Package Manager Selection (do not detect, always ask the user)
   let pkgManager = args.pkgManager;
   if (!pkgManager) {
     if (args.yes) {
       pkgManager = 'pnpm';
     } else {
-      printStep(2, 7, 'Package Manager');
+      printStep(3, 8, 'Package Manager');
       pkgManager = await promptSelect<'pnpm' | 'npm' | 'yarn' | 'bun'>(
         'Choose your package manager:',
         [
@@ -256,19 +320,27 @@ async function main(): Promise<void> {
     }
   }
 
-  // 3. Database ORM Selection
+  // 4. Database ORM Selection
   let db = args.db;
   if (!db) {
     if (args.yes) {
       db = 'none';
     } else {
-      printStep(3, 7, 'Database / ORM');
+      printStep(4, 8, 'Database / ORM');
       db = await promptSelect<DatabaseOption>(
         'Include a database integration?',
         [
-          { value: 'none', label: 'None', hint: 'No database / static & API starters' },
-          { value: 'drizzle', label: 'Drizzle ORM', hint: 'TypeScript ORM with SQLite starter & Studio' },
-          { value: 'prisma', label: 'Prisma', hint: 'Next-gen ORM with SQLite starter' },
+          { value: 'none', label: 'None', hint: 'No database / mock data & in-memory state' },
+          {
+            value: 'drizzle',
+            label: 'Drizzle ORM',
+            hint: 'TypeScript ORM with template-tailored schema, @libsql client & studio',
+          },
+          {
+            value: 'prisma',
+            label: 'Prisma',
+            hint: 'Next-gen ORM with template-tailored schema & SQLite generator',
+          },
         ],
         0
       );
@@ -276,13 +348,13 @@ async function main(): Promise<void> {
     }
   }
 
-  // 4. Linter & Formatter Selection
+  // 5. Linter & Formatter Selection
   let linter = args.linter;
   if (!linter) {
     if (args.yes) {
       linter = 'none';
     } else {
-      printStep(4, 7, 'Linter & Formatter');
+      printStep(5, 8, 'Linter & Formatter');
       linter = await promptSelect<LinterOption>(
         'Include code quality and linting tools?',
         [
@@ -296,37 +368,37 @@ async function main(): Promise<void> {
     }
   }
 
-  // 5. AI Coding Guidelines
+  // 6. AI Coding Guidelines
   let agent = args.agent;
   if (agent === undefined) {
     if (args.yes) {
       agent = true;
     } else {
-      printStep(5, 7, 'AI Coding Guidelines');
+      printStep(6, 8, 'AI Coding Guidelines');
       agent = await promptConfirm('Include AI guidelines (AGENT.md & .cursorrules)?', true);
       console.log();
     }
   }
 
-  // 6. Docker Container
+  // 7. Docker Container
   let docker = args.docker;
   if (docker === undefined) {
     if (args.yes) {
       docker = false;
     } else {
-      printStep(6, 7, 'Docker Container');
+      printStep(7, 8, 'Docker Container');
       docker = await promptConfirm('Include Docker container setup (Dockerfile & compose)?', false);
       console.log();
     }
   }
 
-  // 7. Git & Dependencies
+  // 8. Git & Dependencies
   let gitInit = args.git;
   if (gitInit === undefined) {
     if (args.yes) {
       gitInit = true;
     } else {
-      printStep(7, 7, 'Git & Dependencies');
+      printStep(8, 8, 'Git & Dependencies');
       gitInit = await promptConfirm('Initialize a new Git repository?', true);
       console.log();
     }
@@ -346,6 +418,7 @@ async function main(): Promise<void> {
   const scaffoldResult = await scaffoldProject({
     targetDir: resolvedTarget,
     projectName,
+    template,
     pkgManager,
     db,
     linter,
